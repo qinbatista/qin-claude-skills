@@ -1,0 +1,27 @@
+{
+  "schema_version": 2,
+  "comment": "Catalog-derived Claude model ladder, ordered cheapest to most expensive. `pairs` is the flat model|effort sequence the boundary-search algorithm walks — mirrors Codex's model_registry.py flattening (each model row x its supported efforts, in registry order). Update model names/order here when Anthropic ships new tiers; the skill logic never hardcodes model names.",
+  "rungs": [
+    { "model": "haiku",  "role": "priority-producer", "cost": "cheapest", "good_for": "mechanical edits, renames, formatting, boilerplate, simple lookups, small bounded scripts" },
+    { "model": "sonnet", "role": "quality",           "cost": "balanced", "good_for": "standard coding, refactors, tests, single-module features" },
+    { "model": "opus",   "role": "quality-high",      "cost": "expensive", "good_for": "complex multi-file design, hard debugging, architecture" },
+    { "model": "fable",  "role": "frontier",          "cost": "highest",  "good_for": "hardest reasoning, ambiguous specs, final repair rung" }
+  ],
+  "efforts": ["low", "medium", "high", "xhigh", "max"],
+  "pairs": [
+    "haiku|low", "haiku|medium", "haiku|high", "haiku|xhigh", "haiku|max",
+    "sonnet|low", "sonnet|medium", "sonnet|high", "sonnet|xhigh", "sonnet|max",
+    "opus|low", "opus|medium", "opus|high", "opus|xhigh", "opus|max",
+    "fable|low", "fable|medium", "fable|high", "fable|xhigh", "fable|max"
+  ],
+  "cheap_first": {
+    "eligible": "bounded text/code tasks where failure is cheap to detect (tests exist, output is verifiable)",
+    "easy_pair":    { "model": "haiku",  "effort": "low" },
+    "complex_pair": { "model": "sonnet", "effort": "high" }
+  },
+  "skip_routing": [
+    "exact read-only lookups (answer inline, no delegation)",
+    "conversational answers",
+    "verification/review of another agent's output (use a different, equal-or-stronger model, never the failed pair)"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "evidence_scope": "sanitized real A/B cohort: same prompt, cheap arm (haiku|low) vs strong arm (opus), objectively graded",
+  "date": "2026-07-16",
+  "method": "Three tiers (simple/medium/complex). Both arms received byte-identical prompts except the output file path. Coding tiers were graded by deterministic test scripts with independently verified reference values, not by model self-report. Token counts are total subagent-session tokens (includes fixed harness overhead, so cross-arm token differences are muted; the cost difference comes from per-token price).",
+  "pricing_basis": {
+    "source": "Anthropic official model pricing (claude-api skill reference, cached 2026-06-24)",
+    "haiku-4-5_per_mtok": {"input_usd": 1.0, "output_usd": 5.0},
+    "opus-4-8_per_mtok": {"input_usd": 5.0, "output_usd": 25.0},
+    "per_token_price_ratio": "5x on both input and output"
+  },
+  "tasks": [
+    {
+      "tier": "simple",
+      "label": "arithmetic: 17*23+5, answer-only, no tools",
+      "haiku_arm": {"tokens": 15505, "time_ms": 2344, "output": "396", "correct": true},
+      "opus_arm": {"tokens": 15962, "time_ms": 2558, "output": "42", "correct": false},
+      "opus_retries": [
+        {"note": "identical prompt retry returned identical token count and identical wrong output '42' — likely a same-(prompt,model) cache replay, counted as 1 distinct attempt", "tokens": 15962, "time_ms": 1612, "output": "42", "correct": false},
+        {"note": "reworded probe to rule out caching", "tokens": 15974, "time_ms": 2829, "output": "388", "correct": false}
+      ],
+      "verdict": "haiku PASS, opus FAIL on all distinct attempts (opus computed 17*23 as 383 in the reworded probe; correct is 391)",
+      "status": "correctness gate: cheap arm wins outright"
+    },
+    {
+      "tier": "medium",
+      "label": "merge_overlapping_intervals with touching-interval and unsorted-input edge cases, graded on 6 hand-verified cases",
+      "haiku_arm": {"tokens": 17200, "time_ms": 9274, "correct": true},
+      "opus_arm": {"tokens": 17524, "time_ms": 11046, "correct": true},
+      "token_savings_percent": 1.85,
+      "time_savings_percent": 16.04,
+      "status": "both pass; haiku marginally cheaper in tokens, 16% faster"
+    },
+    {
+      "tier": "complex",
+      "label": "recursive-descent arithmetic expression evaluator (precedence, unary minus, parens, no eval()), graded on 8 hand-computed cases; both sources inspected for eval()/exec() cheating — clean",
+      "haiku_arm": {"tokens": 21065, "time_ms": 39052, "correct": true},
+      "opus_arm": {"tokens": 19896, "time_ms": 37735, "correct": true},
+      "token_savings_percent": -5.88,
+      "time_savings_percent": -3.49,
+      "status": "both pass; haiku used MORE tokens and time on this tier — reported honestly, not hidden"
+    }
+  ],
+  "aggregate": {
+    "tokens": {"haiku_total": 53770, "opus_total": 53382, "note": "haiku +0.7% — effectively equal; totals are dominated by fixed per-subagent harness overhead (~15k), so token count is NOT where the saving is"},
+    "time_ms": {"haiku_total": 50670, "opus_total": 51339, "note": "haiku 1.3% faster — effectively equal"},
+    "correctness": {"haiku": "3/3", "opus": "2/3", "note": "the strong arm failed the SIMPLE tier repeatedly — model price does not guarantee per-task correctness; objective grading is what catches it"},
+    "cost_conclusion": "At near-equal token counts, the routed haiku arm costs ~5x less per token (~80% cost reduction) on every task it passes. The boundary-search ledger ensures haiku only keeps task classes it has actually passed; failures escalate one rung and are remembered."
+  },
+  "caveats": [
+    "Single-run pairs, not durable medians — same disclosure Codex's own README makes for its one-run smoke comparison.",
+    "Token counts include the fixed subagent system-prompt overhead; marginal generation differences between models are muted at this task size.",
+    "The opus simple-tier failure is a real observed result from 2 distinct attempts (plus 1 likely cache replay); it may not reproduce at different times.",
+    "Benchmark probes were deliberately NOT recorded into the private adaptive ledger (local/ledger.jsonl), mirroring Codex's rule that synthetic benchmark runs must not calibrate real task-class learning."
+  ]
+}

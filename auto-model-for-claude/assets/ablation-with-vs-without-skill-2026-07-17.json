@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "evidence_scope": "TRUE ABLATION: identical delegated tasks run WITH the skill installed vs WITHOUT it (hook temporarily removed from settings.json, then restored). This is the primary evidence for what the skill actually changes; the earlier haiku-vs-opus A/B is secondary arm-comparison data.",
+  "date": "2026-07-17",
+  "method": "Byte-identical prompts per task pair, no model param on any Agent call. WITHOUT arm: PreToolUse hook removed -> subagent inherits the session model. WITH arm: hook restored -> skill's boundary-search router injects the model. Model identity via subagent self-report; coding output graded by a deterministic script.",
+  "session_default_model": "claude-fable-5 (user's configured session model at test time)",
+  "pricing_basis": {
+    "source": "Anthropic official pricing (claude-api skill reference, cached 2026-06-24)",
+    "fable-5_per_mtok": {"input_usd": 10.0, "output_usd": 50.0},
+    "haiku-4-5_per_mtok": {"input_usd": 1.0, "output_usd": 5.0},
+    "ratio": "exactly 10x on BOTH input and output, so the cost ratio is split-independent"
+  },
+  "tasks": [
+    {
+      "task": "simple arithmetic (38*47+11), answer-only",
+      "without_skill": {"model_self_reported": "claude-fable-5", "answer": "1797", "correct": true, "tokens": 16033, "time_ms": 5783},
+      "with_skill": {"model_self_reported": "claude-haiku-4-5-20251001", "answer": "1797", "correct": true, "tokens": 15669, "time_ms": 4252}
+    },
+    {
+      "task": "merge_overlapping_intervals with touching/unsorted edge cases, graded on 6 hand-verified cases",
+      "without_skill": {"model_self_reported": "claude-fable-5", "grade": "PASS", "tokens": 17891, "time_ms": 18701},
+      "with_skill": {"model_self_reported": "claude-haiku-4-5-20251001", "grade": "PASS", "tokens": 17139, "time_ms": 9283}
+    }
+  ],
+  "aggregate": {
+    "correctness": "2/2 both arms — no quality loss on these task classes",
+    "tokens": {"without": 33924, "with": 32808, "delta": "-3.3% with skill"},
+    "time_ms": {"without": 24484, "with": 13535, "delta": "-44.7% with skill (haiku is faster)"},
+    "cost": "with-skill cost ≈ 9.7% of baseline → ≈ 90.3% saving. Derivation: per-token price is exactly 10x lower on both input and output, times the 0.967 token ratio. Split-independent because both price axes share the same 10x ratio.",
+    "conclusion": "Without the skill, every delegated Agent call silently inherits the most expensive session model (fable). With the skill, bounded tasks route to haiku, produce equally correct output on these task classes, run ~45% faster, and cost ~1/10th."
+  },
+  "caveats": [
+    "Single-run pairs, not durable medians.",
+    "The 90% figure assumes the session model is fable; with a sonnet session default the same math gives ~67-70% (3x price ratio).",
+    "Equal correctness held on these bounded task classes; the ledger exists precisely because it will NOT hold everywhere — failures escalate and are remembered.",
+    "The hook was restored and re-verified (jq + pipe test + this arm's own live runs) immediately after the baseline arm.",
+    "Ablation probes kept OUT of the adaptive ledger, same rule as benchmark probes."
+  ]
+}

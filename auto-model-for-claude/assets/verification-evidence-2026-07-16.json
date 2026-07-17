@@ -1,0 +1,89 @@
+{
+  "evidence_scope": "correctness and routing-mechanism verification, NOT a cost/performance A/B benchmark",
+  "note": "Unlike the Codex mirror's model-routing-benchmark-example.json (which A/B-compares token/time cost between two routing strategies on repeated matched workloads), this file has no comparative cost baseline to A/B against -- Claude Code has no equivalent dual-arm benchmark harness wired up yet. What follows is real pass/fail evidence: each coding task was independently, objectively graded by a deterministic script, not by model self-report or my own subjective read.",
+  "date": "2026-07-16",
+  "algorithm_fidelity_test": {
+    "description": "24-assertion automated test suite (comprehensive_test.py) run against auto_model.py from a clean-slate ledger, covering every branch of the boundary-search algorithm ported from Codex's obsidian_model_memory.py.",
+    "assertions_total": 24,
+    "assertions_passed": 24,
+    "coverage": ["cold_start_easy", "cold_start_complex", "downgrade_probe_chain", "downgrade_to_floor_freeze", "upgrade_escalation", "ladder_exhaustion_top_rung", "gap_trial_boundary_narrowing", "operational_fallback_immediate_escalation", "file_module_task_type_scoping_tiers"]
+  },
+  "real_graded_coding_tasks": [
+    {
+      "task": "nth_ugly_number(n)",
+      "model_routed_by": "cold_start_cheap_first",
+      "resolved_pair": "haiku|low",
+      "grading_method": "deterministic script checked against a brute-force-independently-verified reference table",
+      "caveat": "First grading run reported FAIL; before trusting that, the reference table was independently re-verified by brute force and found to contain a wrong hand-typed value (my error, not the model's). Corrected and re-graded.",
+      "result": "pass",
+      "tokens": 17761,
+      "time_ms": 16390
+    },
+    {
+      "task": "merge_overlapping_intervals(intervals)",
+      "model_routed_by": "cold_start_cheap_first",
+      "resolved_pair": "haiku|low",
+      "grading_method": "deterministic script, 6 hand-reasoned cases including touching-interval merge rule and unsorted input",
+      "result": "pass",
+      "tokens": 17343,
+      "time_ms": 11250
+    },
+    {
+      "task": "evaluate_expression(expr) -- arithmetic with precedence, unary minus, parentheses, no eval()",
+      "model_routed_by": "cold_start_cheap_first",
+      "resolved_pair": "haiku|low",
+      "grading_method": "deterministic script, 8 hand-computed cases; source additionally inspected to confirm a real recursive-descent parser (no eval()/exec() shortcut)",
+      "result": "pass",
+      "tokens": 22576,
+      "time_ms": 55283
+    }
+  ],
+  "note_on_boundary_search_evidence": "All three real graded tasks passed on the first attempt at the cheap-first cold-start pair (haiku|low). No genuine quality failure occurred in this session to organically trigger the upgrade/downgrade boundary search on real data -- that path is proven correct via the algorithm_fidelity_test above (scripted pass/fail inputs) but has not yet been exercised by a real failure. Deliberately not fabricated here.",
+  "routing_mechanism_live_tests": [
+    {
+      "surface": "Agent tool, model param omitted",
+      "expected": "PreToolUse hook injects a model",
+      "observed_model": "claude-haiku-4-5-20251001",
+      "confirmed_via": "subagent self-reported its own model ID",
+      "tokens": 15564,
+      "time_ms": 2656
+    },
+    {
+      "surface": "Agent tool, model param omitted, description contains complexity keywords (refactor/security/architecture)",
+      "expected": "hook injects a stronger model",
+      "observed_model": "claude-sonnet-5",
+      "confirmed_via": "subagent self-reported its own model ID",
+      "tokens": 22132,
+      "time_ms": 5545
+    },
+    {
+      "surface": "Agent tool, model explicitly set to opus",
+      "expected": "hook must not override an explicit choice",
+      "observed_model": "claude-opus-4-8",
+      "confirmed_via": "subagent self-reported its own model ID",
+      "tokens": 15977,
+      "time_ms": 3487
+    },
+    {
+      "surface": "Workflow agent() opts.model, no override",
+      "expected": "inherits the session model",
+      "observed_model": "claude-sonnet-5",
+      "confirmed_via": "subagent self-reported its own model ID"
+    },
+    {
+      "surface": "Workflow agent() opts.model='haiku'",
+      "expected": "haiku executes",
+      "observed_model": "claude-haiku-4-5-20251001",
+      "confirmed_via": "subagent self-reported its own model ID"
+    },
+    {
+      "surface": "Workflow agent() opts.model='opus'",
+      "expected": "opus executes",
+      "observed_model": "claude-opus-4-8",
+      "confirmed_via": "subagent self-reported its own model ID",
+      "tokens_all_three_workflow_agents_combined": 46411,
+      "time_ms_all_three_workflow_agents_combined": 6079
+    }
+  ],
+  "known_untested_gap": "Genuine operational failure (a real Agent call actually erroring/crashing) has not occurred and cannot be forced on demand honestly -- that path is verified only via scripted ledger entries, disclosed as such."
+}
