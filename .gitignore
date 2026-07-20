@@ -8,6 +8,7 @@ __pycache__/
 cache/
 outputs/
 work/
+data/cache/
 local/
 .venv/
 venv/
@@ -15,3 +16,5 @@ node_modules/
 dist/
 build/
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/

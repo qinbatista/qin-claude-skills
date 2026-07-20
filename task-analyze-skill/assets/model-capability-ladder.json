@@ -1,0 +1,344 @@
+{
+  "schema_version": 2,
+  "registry_id": "dynamic-claude-model-capability-ladder",
+  "scope": "shared_non_personal",
+  "source": {
+    "claude_catalog": "Anthropic Claude API documented models",
+    "client_version": "claude-code-1.0",
+    "catalog_date": "2026-07-19",
+    "source_authority": "references/ladder.json from auto-model-for-claude",
+    "catalog_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "active_family": {
+    "id": "claude-generation",
+    "generation": "current-saved",
+    "selection": "current_saved_claude_ladder",
+    "model_count": 3
+  },
+  "catalog_models": [
+    {
+      "id": "fable",
+      "display_name": "Claude Fable",
+      "provider_priority": 1,
+      "provider_positioning": "Frontier model for hardest reasoning and complex tasks.",
+      "supported_in_api": true,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "context_window": 200000,
+      "claude_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "default_effort": "low",
+      "additional_speed_tiers": [],
+      "catalog_role": "active_quality"
+    },
+    {
+      "id": "opus",
+      "display_name": "Claude Opus",
+      "provider_priority": 2,
+      "provider_positioning": "High-quality model for complex reasoning.",
+      "supported_in_api": true,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "context_window": 200000,
+      "claude_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "default_effort": "medium",
+      "additional_speed_tiers": [],
+      "catalog_role": "active_quality"
+    },
+    {
+      "id": "sonnet",
+      "display_name": "Claude Sonnet",
+      "provider_priority": 3,
+      "provider_positioning": "Balanced quality model for everyday work.",
+      "supported_in_api": true,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "context_window": 200000,
+      "claude_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "default_effort": "medium",
+      "additional_speed_tiers": [],
+      "catalog_role": "active_quality"
+    },
+    {
+      "id": "haiku",
+      "display_name": "Claude Haiku",
+      "provider_priority": 4,
+      "provider_positioning": "Priority producer; fast and cost-efficient.",
+      "supported_in_api": true,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "context_window": 200000,
+      "claude_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "default_effort": "low",
+      "additional_speed_tiers": [],
+      "catalog_role": "priority_producer"
+    }
+  ],
+  "ladder_direction": "cheapest_to_most_expensive",
+  "effort_order": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+  ],
+  "role_models": {
+    "weak": "sonnet",
+    "balanced": "opus",
+    "frontier": "fable"
+  },
+  "role_pairs": {
+    "floor": "sonnet|low",
+    "weak_default": "sonnet|low",
+    "balanced_default": "opus|medium",
+    "balanced_complex": "opus|high",
+    "frontier_complex": "fable|high"
+  },
+  "policy": {
+    "enabled": true,
+    "quality_first": true,
+    "downgrade_after_repeated_real_passes": true,
+    "minimum_real_passes_before_downgrade": 2,
+    "upgrade_after_quality_failure": true,
+    "operational_failures_are_neutral": true,
+    "freeze_lowest_verified_pair": true,
+    "priority_producer_first_text_code": false,
+    "priority_producer_scheduled_sources_only": true,
+    "minimum_pair": "sonnet|low"
+  },
+  "priority_producer": {
+    "enabled": true,
+    "id": "haiku",
+    "display_name": "Claude Haiku",
+    "routing_role": "scheduled_independent_source_branch",
+    "provider_priority": 4,
+    "provider_positioning": "Priority producer; fast and cost-efficient.",
+    "supported_in_api": true,
+    "input_modalities": [
+      "text"
+    ],
+    "context_window": 200000,
+    "claude_efforts": [
+      "low",
+      "medium",
+      "high",
+      "xhigh",
+      "max"
+    ],
+    "adaptive_efforts": [
+      "low",
+      "high"
+    ],
+    "effort_by_complexity": {
+      "easy": "low",
+      "complex": "high"
+    },
+    "eligible_task_types": [
+      "question",
+      "summary",
+      "document",
+      "prompt",
+      "code",
+      "debug",
+      "integration",
+      "script",
+      "normal-script-update",
+      "code-design",
+      "finding-bugs",
+      "documentation-instructions"
+    ],
+    "eligible_modalities": [
+      "text"
+    ],
+    "excluded_operations": [
+      "audit",
+      "lookup",
+      "read",
+      "review",
+      "status",
+      "verify"
+    ],
+    "operational_fallback": "fail_scheduled_graph",
+    "quality_failure": "fail_scheduled_graph"
+  },
+  "private_learning_contract": {
+    "authority": "obsidian_broad_claude_model_switch",
+    "path_template": "Claude Model Switch.md",
+    "specificity_order": [
+      "project_task",
+      "module",
+      "file",
+      "symbol"
+    ],
+    "fields_only": true,
+    "hierarchy_notes": false,
+    "legacy_local_json": "read_only_inactive"
+  },
+  "default_cold_start": "opus|medium",
+  "cold_start_defaults": {
+    "question": {
+      "easy": "sonnet|low",
+      "complex": "opus|medium"
+    },
+    "summary": {
+      "easy": "sonnet|low",
+      "complex": "opus|medium"
+    },
+    "spreadsheet": {
+      "easy": "opus|medium",
+      "complex": "opus|high"
+    },
+    "document": {
+      "easy": "sonnet|medium",
+      "complex": "opus|high"
+    },
+    "code": {
+      "easy": "opus|medium",
+      "complex": "opus|high"
+    },
+    "debug": {
+      "easy": "opus|medium",
+      "complex": "fable|high"
+    },
+    "integration": {
+      "easy": "opus|high",
+      "complex": "fable|high"
+    },
+    "prompt": {
+      "easy": "opus|medium",
+      "complex": "fable|high"
+    },
+    "visual": {
+      "easy": "opus|medium",
+      "complex": "fable|high"
+    },
+    "script": {
+      "easy": "opus|medium",
+      "complex": "opus|high"
+    },
+    "normal-script-update": {
+      "easy": "opus|medium",
+      "complex": "opus|high"
+    },
+    "code-design": {
+      "easy": "opus|medium",
+      "complex": "opus|high"
+    },
+    "finding-bugs": {
+      "easy": "opus|medium",
+      "complex": "fable|high"
+    },
+    "documentation-instructions": {
+      "easy": "sonnet|medium",
+      "complex": "opus|high"
+    }
+  },
+  "models": [
+    {
+      "id": "sonnet",
+      "display_name": "Claude Sonnet",
+      "provider_priority": 3,
+      "provider_positioning": "Balanced quality model for everyday work.",
+      "supported_in_api": true,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "context_window": 200000,
+      "claude_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "default_effort": "medium",
+      "additional_speed_tiers": [],
+      "capability_rank": 1,
+      "capability_roles": [
+        "weak"
+      ]
+    },
+    {
+      "id": "opus",
+      "display_name": "Claude Opus",
+      "provider_priority": 2,
+      "provider_positioning": "High-quality model for complex reasoning.",
+      "supported_in_api": true,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "context_window": 200000,
+      "claude_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "default_effort": "medium",
+      "additional_speed_tiers": [],
+      "capability_rank": 2,
+      "capability_roles": [
+        "balanced"
+      ]
+    },
+    {
+      "id": "fable",
+      "display_name": "Claude Fable",
+      "provider_priority": 1,
+      "provider_positioning": "Frontier model for hardest reasoning and complex tasks.",
+      "supported_in_api": true,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "context_window": 200000,
+      "claude_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "default_effort": "low",
+      "additional_speed_tiers": [],
+      "capability_rank": 3,
+      "capability_roles": [
+        "frontier"
+      ]
+    }
+  ]
+}

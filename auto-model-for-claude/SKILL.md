@@ -10,6 +10,15 @@ Adaptive per-task model selection, ported from the Codex global-skills strategy
 built-in adaptive routing, but it DOES support per-delegation model choice —
 this skill layers the Codex selection policy on top of that support.
 
+> **Division of labor with the full ported system.** This repo now also carries
+> the full Claude Code port of the upstream eight-skill system (see `PORTING.md`
+> and `task-analyze-skill`/`project-memory-skill`). This skill remains the
+> lightweight **Agent-tool enforcement layer**: its PreToolUse hook and local
+> `local/ledger.jsonl` stay active. The Obsidian page
+> `Skills/Claude Model Switch.md` is now owned by
+> `project-memory-skill/scripts/obsidian_model_memory.py`; do **not** run
+> `scripts/sync_vault.py` anymore — it is superseded for that page.
+
 ## Where Claude supports model routing (use these, never invent others)
 
 1. **Agent tool** — `model` param: `haiku` | `sonnet` | `opus` | `fable`.
