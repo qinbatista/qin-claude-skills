@@ -50,12 +50,12 @@ automatically; tool-only routes have no adaptive producer sample.
   The saved snapshot is `task-analyze-skill/assets/model-capability-ladder.json`. Ordinary
   tasks only read it. Only an explicit user model-update request may rewrite it, from
   Claude Code's documented model aliases; never fetch models over the network; a
-  missing/invalid rewrite source preserves the last valid ladder. Search only within
-  matching project/task/module/file/symbol context: one Real PASS retains the pair, two
-  PASS results trial one rung down, correctness/quality FAIL moves one rung up, and a
-  like-for-like cost tie ranks tokens then time then weaker pair. Reuse the frozen pair with
-  `trial=false`. `haiku` is schedule-only for disjoint source branches. Reuse existing
-  Obsidian project hierarchy nodes before creating missing task/module/file/symbol nodes.
+  missing/invalid rewrite source preserves the last valid ladder. Every task stores a
+  `0-100` score. Eligible small low-risk edits try `haiku` first; other production uses the
+  saved quality pair. One Real PASS retains a quality pair, two PASS results trial one rung
+  down, and correctness/quality FAIL moves one rung up. `haiku` quality failure suppresses
+  the matching project/task/operation/code-kind/score-band context and upgrades the next
+  task. Reuse the frozen pair with `trial=false`.
 - Correctness/quality is the eligibility gate. Rank tokens, then process time, then weaker
   rung only across complete Real-passing pairs in the same exact `workload_prompt_sha256`
   cohort. Cross-workload or incomplete evidence falls back to the verified quality boundary
@@ -121,11 +121,14 @@ necessary, and remove prose already carried by a visual or source-backed evidenc
 must use the exact product name `Auto Best Model`, identify this edition as **Claude
 Code-only**, link the upstream [`qin-codex-skills`](https://github.com/qinbatista/qin-codex-skills)
 repository as origin, explain that the saved ladder changes only on an explicit local
-model-update request, and describe direct contextual-quality execution, two-PASS descent,
-one-FAIL ascent, `haiku`-only schedule branches, receipt-bound Ending learning, and the
-two-world task versus task+check benchmark. Keep project change memory distinct from
-adaptive model learning, and show that ModelExperience reuses existing project hierarchy
-nodes. Emphasize **finish job first, return result, background verify**. Present the
+model-update request, and describe 0-100 task scoring, `haiku`-low priority for eligible
+small low-risk edits, direct contextual-quality execution for larger work, two-PASS
+descent, one-FAIL ascent, receipt-bound Ending learning, one mandatory scored/model-routed
+End Task per independent real check, and the Fix Task plus fresh Ending retry contract.
+Preserve the two-world task versus task+check benchmark method without rewriting frozen
+historical cohort values. Keep project change memory distinct from adaptive model
+learning, and show that ModelExperience reuses existing project hierarchy nodes.
+Emphasize **finish job first, return result, mandatory real Ending verification**. Present the
 lifecycle benchmark table as clearly-labeled **upstream Codex-measured reference evidence**
 -- never as a Claude Code measurement -- with an explicit note that Claude Code numbers are
 not yet measured. List exactly nine public Skills. Never embed raw prompts, paths, session

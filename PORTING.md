@@ -1,7 +1,9 @@
 # Porting Conventions: qin-codex-skills → qin-claude-skills
 
 This repo is the Claude Code edition of https://github.com/qinbatista/qin-codex-skills
-(v34 "Auto Best Model", 8 public skills). Every skill folder here is a faithful port of
+(v34 "Auto Best Model", 8 public skills; last synced through upstream `master` commit
+`7b81a03` — 0-100 task scoring, haiku-low small-edit priority, and mandatory real-test
+Ending/repair lifecycle). Every skill folder here is a faithful port of
 the same-named upstream folder, adapted to Claude Code's real capabilities. This file is
 the single authority for how Codex concepts map to Claude Code. Ports must follow it
 exactly; do not invent alternative mappings.

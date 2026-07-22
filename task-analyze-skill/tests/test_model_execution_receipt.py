@@ -593,5 +593,35 @@ class ModelExecutionReceiptTests(unittest.TestCase):
                 self.assertEqual(authorization["node_role"], node_role)
 
 
+
+class ClaudeCliResultParsingTests(unittest.TestCase):
+    def claude_result_line(self, **overrides):
+        event = {"type": "result", "subtype": "success", "is_error": False, "result": "TYPO FIXED", "session_id": "session-123", "usage": {"input_tokens": 10, "cache_read_input_tokens": 200, "cache_creation_input_tokens": 90, "output_tokens": 48}, "modelUsage": {"claude-haiku-4-5-20251001": {"outputTokens": 48}}}
+        event.update(overrides)
+        return json.dumps(event)
+
+    def test_claude_result_event_completes_turn_with_usage_and_model_ids(self):
+        summary = module.parse_stdout_events(self.claude_result_line())
+        self.assertTrue(summary["turn_completed"])
+        self.assertFalse(summary["turn_failed"])
+        self.assertEqual(summary["thread_id"], "session-123")
+        self.assertEqual(summary["claude_model_ids"], ["claude-haiku-4-5-20251001"])
+        self.assertEqual(summary["usage"]["total_tokens"], 10 + 200 + 90 + 48)
+        self.assertEqual(summary["usage"]["cached_input_tokens"], 200)
+
+    def test_claude_error_result_is_turn_failed_and_flags_availability(self):
+        line = self.claude_result_line(is_error=True, subtype="error_during_execution", result="API usage limit reached", api_error_status=429)
+        summary = module.parse_stdout_events(line)
+        self.assertTrue(summary["turn_failed"])
+        self.assertFalse(summary["turn_completed"])
+        self.assertTrue(summary["availability_failure"])
+
+    def test_claude_result_text_is_extractable_as_agent_message(self):
+        line = self.claude_result_line(result="BEGIN\nreal text\nEND")
+        self.assertEqual(module.completed_agent_message(line), "BEGIN\nreal text\nEND")
+        self.assertEqual(module.extract_last_agent_message(line), "BEGIN\nreal text\nEND")
+        self.assertTrue(module.is_turn_completed_event(line))
+
+
 if __name__ == "__main__":
     unittest.main()

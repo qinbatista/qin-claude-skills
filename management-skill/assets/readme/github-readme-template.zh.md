@@ -2,13 +2,13 @@
 
 # 🚀 Auto Best Model
 
-**仅限 Claude Code · 先完成并返回主任务 · 再由独立后台任务验证**
+**仅限 Claude Code · 每个任务评分 · 先完成主任务 · 再用强制 Ending 证明结果**
 
 [English](./README.md)
 
 已保存的 `haiku → sonnet → opus → fable` 质量梯级 · 只有你主动要求本地模型更新时才刷新
 
-普通 Auto 从任务策略质量档位开始，不会一直跑 `fable|max` · `haiku` 只用于已通过成本门的 schedule 分支
+0–24 分的小型低风险编辑优先 `haiku`-low · 更大任务使用已保存的质量梯级
 
 源仓库为仅限 Codex 的 [`qin-codex-skills`](https://github.com/qinbatista/qin-codex-skills)（v34，8 个公开 Skill）· 本仓库把同一套生命周期移植到 Claude Code，并新增 `auto-model-for-claude`
 
@@ -18,19 +18,19 @@
 
 <picture>
   <source media="(max-width: 600px)" srcset="./management-skill/assets/readme/core-flow-zh-mobile.svg">
-  <img src="./management-skill/assets/readme/core-flow-zh.svg" alt="核心流程：先完成并返回主任务，再启动独立且不阻塞的后台 Ending Task">
+  <img src="./management-skill/assets/readme/core-flow-zh.svg" alt="核心流程：先评分并完成主任务，再为独立真实检查运行强制评分 Ending Task">
 </picture>
 
-## ✅ 先完成主任务，再后台验证
+## ✅ 先完成主任务，再执行强制真实验证
 
 这是整个生命周期最重要的结构规则，与 Codex 源仓库保持一致：
 
-1. **主任务先完成用户要求的工作**，只运行与实现相称的本地基础检查。
+1. **每个提交先按 0–100 评分，再完成用户要求的工作**，并运行与实现相称的基础检查。
 2. **立即返回已完成结果。** 不让用户被验证、轮询或修复流程卡住。
-3. **另开 `End Task-<任务名>` 独立后台 agent。** 它只读审计已有证据，绝不阻塞已经完成的主任务。
-4. **Ending 只返回 PASS 或准确失败。** 不向用户提问、不等待、不轮询、不调用重型 API，也不在 Ending 内修复；失败后另开新的修复任务，使用不同验证者复核。
+3. **每个独立真实 test、API check 或 render 都另开一个独立评分并选模的 `End Task-<任务名>-<检查>` 后台 agent。** 有依赖的检查保持顺序，不随意拆散。
+4. **每个 Ending 必须执行分配的真实检查，所有必需检查都要 PASS。** FAIL 会建立包含准确错误的 Fix Task，再由全新的 End Task 重跑；最多修复三次。
 
-主工作与 Ending 验证刻意使用不同的 agent 运行。"后台"表示主结果一返回，用户就能继续工作；它不表示跳过验证。
+主工作与 Ending 验证刻意使用不同的 agent 运行。文字总结不算验证；重型修改必须用对应的真实测试、API 证据、build、render 或视觉检查证明。
 
 ## ⚡ 模型与私有学习
 
@@ -39,22 +39,22 @@
   <img src="./management-skill/assets/readme/model-router.svg" alt="任务策略质量梯级：按 receipt 证据保留、降级或升级一个档位">
 </picture>
 
-- **冷启动：** task type 与复杂度从已保存的 `sonnet`/`opus`/`fable` 质量梯级选档；普通任务不会默认 `haiku`，也不会永远停在 `fable|max`。
-- **学习：** 一次 receipt 有效的 Real PASS 保留当前档；两次匹配 PASS 才向下降一级；质量失败立即向上升一级。
+- **冷启动：** task type 与 0–100 分数从已保存的 `sonnet`/`opus`/`fable` 质量梯级选档；0–24 分的小型低风险编辑先试 `haiku`-low。
+- **学习：** 一次 receipt 有效的 Real PASS 保留当前档；两次匹配 PASS 才向下降一级；质量失败立即向上升一级。`haiku` 质量失败会在匹配上下文中禁用 `haiku`，并升级下一个任务。
 - **操作故障：** 零结果故障只允许一次更强 fallback，不把它当质量失败学习。
-- **Schedule：** `haiku` 只用于已通过 pre-read 成本门的独立 source 分支；小型多文件任务如果 fan-out 会重复上下文，就只用一个上下文 producer。
+- **Schedule：** 两到三个独立只读 source 在读取前进行成本准入；有依赖的多文件工作只使用一个上下文 producer。
 - **记忆：** Ending 结果更新宽泛项目/Skills **`Claude Model Switch.md`** 页面；project/task/module/file/symbol 仅是字段，不创建层级笔记。这个页面名称是本 Claude Code 版本专属的，绝不与 Codex 自己的 `Model Switch.md` 学习器共用。
 
 ## 规则
 
-- **Producer：** 使用任务策略保存的质量档；一次 PASS 保留，两次匹配 PASS 降一级，质量失败升一级。
+- **Producer：** 显示分数、band 与 route change；0–24 分低风险编辑先试 `haiku`-low，否则用已保存档。
 - **Prompt：** 可复用 Prompt 和持久 AI 指令加载 Prompt Skill。
 - **路由：** 只有明确要求或当前端到端证据成立时才委派。
 - **交付：** 先完成并返回主任务结果，再进行后台验证。
-- **验证：** 交付后另开不阻塞的 `End Task-<任务名>`；first-result 不包含它。
+- **验证：** 每个独立检查使用评分、选模 End Task；全部 PASS。FAIL → Fix Task → 全新 End Task，最多三次。
 - **文件：** 修改前回溯项目/模块/文件历史；修改后记录已验证结果。
 - **记忆：** 修改历史用本地 JSONL（可投影 Obsidian）；私有学习用宽泛项目/Skills `Claude Model Switch.md`，仅字段，不建层级笔记。
-- **模型：** 使用已保存的梯级；主动本地更新时从 Claude Code 官方模型别名刷新；`haiku` 只用于 schedule source；缓存不可用就保留原列表。
+- **模型：** 使用已保存的梯级；主动本地更新时从 Claude Code 官方模型别名刷新；符合条件的小编辑优先 `haiku`-low；缓存不可用就保留原列表。
 - **隐私：** secret、原始 Prompt/结果、receipt、ledger、cache 和临时文件留在本地。
 
 ## 📊 生命周期 Benchmark：上游 Codex 实测参考证据
@@ -66,7 +66,7 @@
 > （`scripts/render_lifecycle_benchmark.py` 及其测试）就是为了以后能跑出并公开真正的
 > Claude Code 数据。
 
-两边都从 `gpt-5.6-sol | ultra` 开始。**无 Skill** 完成主任务后停止，验证 token/时间都是 **0**。**有 Skill** 用 receipt 证明的动态质量档完成主任务、先返回结果，再启动独立只读 Ending；Ending 永不阻塞交付。
+两边都从 `gpt-5.6-sol | ultra` 开始。**无 Skill** 完成主任务后停止，验证成本为 **0**；**有 Skill** 用 receipt 证明的动态档完成主任务并返回，再启动独立 Ending。**冻结证据说明：** 下表是不改数值的 2026-07-17 上游 v34 cohort。当前按分数优先 `haiku` 和强制多 Ending/修复会影响未来 Auto 结果；不会改写历史数值、固定 Direct arm 或“task 与 task+Ending”计量方法。
 
 ![六组真实 A/B：比较无 Skill 主任务、有 Skill 主任务，以及仅属于 Auto 的条纹 Ending 成本（上游 Codex 实测）](./management-skill/assets/readme/lifecycle-skill-benchmark.svg)
 

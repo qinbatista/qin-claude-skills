@@ -120,7 +120,7 @@ def _receipt_arguments(args, selected):
         result_output=args.result_output,
         workdir=args.workdir,
         state_db=args.state_db,
-        codex_bin=args.codex_bin,
+        claude_bin=args.claude_bin,
         sandbox=args.sandbox,
         allow_fallback=args.allow_fallback,
         ignore_user_config=args.ignore_user_config,
@@ -250,8 +250,8 @@ def parse_args(argv=None):
     parser.add_argument("--result-output", type=Path, required=True)
     parser.add_argument("--emit-result", action="store_true", help="Return the saved passing result in the command summary; never store it in routing history or the receipt.")
     parser.add_argument("--workdir", type=Path, default=Path.cwd())
-    parser.add_argument("--state-db", type=Path, default=Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")) / "state_5.sqlite")
-    parser.add_argument("--codex-bin", default="codex")
+    parser.add_argument("--state-db", type=Path, default=Path(os.environ.get("CLAUDE_HOME", Path.home() / ".claude")) / "state_5.sqlite")
+    parser.add_argument("--claude-bin", default="claude")
     parser.add_argument("--sandbox", choices=["read-only", "workspace-write", "danger-full-access"], default="read-only")
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--ignore-user-config", action="store_true")

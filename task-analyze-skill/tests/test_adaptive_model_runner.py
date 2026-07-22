@@ -64,7 +64,7 @@ def arguments(root, ladder=None, static="opus|medium", hard="sonnet|low"):
         result_output=root / "result.json",
         workdir=root,
         state_db=root / "state.sqlite",
-        codex_bin="codex",
+        claude_bin="claude",
         sandbox="read-only",
         timeout=30,
         ignore_user_config=True,

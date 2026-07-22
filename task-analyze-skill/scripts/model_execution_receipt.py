@@ -335,8 +335,20 @@ def rejected_run_receipt(args, error):
     return receipt
 
 
+def claude_result_usage(event):
+    usage = event.get("usage") if isinstance(event.get("usage"), dict) else {}
+    uncached = usage.get("input_tokens")
+    cache_read = usage.get("cache_read_input_tokens") or 0
+    cache_creation = usage.get("cache_creation_input_tokens") or 0
+    output_tokens = usage.get("output_tokens")
+    if not isinstance(uncached, int) or not isinstance(output_tokens, int):
+        return {}
+    input_tokens = uncached + cache_creation + cache_read
+    return {"input_tokens": input_tokens, "cached_input_tokens": cache_read, "output_tokens": output_tokens, "reasoning_output_tokens": 0, "total_tokens": input_tokens + output_tokens}
+
+
 def parse_stdout_events(stdout_text):
-    summary = {"thread_id": None, "usage": {}, "output_hash": None, "turn_completed": False, "turn_failed": False, "availability_failure": False}
+    summary = {"thread_id": None, "usage": {}, "output_hash": None, "turn_completed": False, "turn_failed": False, "availability_failure": False, "claude_model_ids": []}
     for raw_line in stdout_text.splitlines():
         try:
             event = json.loads(raw_line)
@@ -356,6 +368,21 @@ def parse_stdout_events(stdout_text):
             summary["availability_failure"] = summary["availability_failure"] or any(marker in failure_message.lower() for marker in ("usage limit", "rate limit", "purchase more credits", "capacity", "temporarily unavailable"))
         elif event_type == "item.completed" and isinstance(event.get("item"), dict) and event["item"].get("type") == "agent_message":
             summary["output_hash"] = sha256_text(event["item"].get("text", ""))
+        elif event_type == "result":
+            if isinstance(event.get("session_id"), str) and event["session_id"] and summary["thread_id"] is None:
+                summary["thread_id"] = event["session_id"]
+            failure_message = event.get("result") if isinstance(event.get("result"), str) else ""
+            if event.get("is_error") is True or event.get("subtype") not in (None, "success"):
+                summary["turn_failed"] = True
+                summary["turn_completed"] = False
+                summary["availability_failure"] = summary["availability_failure"] or event.get("api_error_status") in (429, 529) or any(marker in failure_message.lower() for marker in ("usage limit", "rate limit", "purchase more credits", "capacity", "temporarily unavailable"))
+            else:
+                summary["turn_completed"] = True
+                summary["turn_failed"] = False
+                summary["usage"] = claude_result_usage(event) or summary["usage"]
+                summary["claude_model_ids"] = sorted((event.get("modelUsage") or {}).keys()) if isinstance(event.get("modelUsage"), dict) else summary["claude_model_ids"]
+            if isinstance(event.get("result"), str):
+                summary["output_hash"] = sha256_text(event["result"])
     return summary
 
 
@@ -368,6 +395,8 @@ def extract_last_agent_message(stdout_text):
             continue
         if event.get("type") == "item.completed" and isinstance(event.get("item"), dict) and event["item"].get("type") == "agent_message":
             last_message = event["item"].get("text", "")
+        elif event.get("type") == "result" and isinstance(event.get("result"), str):
+            last_message = event["result"]
     return last_message
 
 
@@ -415,7 +444,11 @@ def completed_agent_message(raw_line):
     except (TypeError, json.JSONDecodeError):
         return None
     item = event.get("item") if isinstance(event, dict) and event.get("type") == "item.completed" else None
-    return item.get("text") if isinstance(item, dict) and item.get("type") == "agent_message" and isinstance(item.get("text"), str) else None
+    if isinstance(item, dict) and item.get("type") == "agent_message" and isinstance(item.get("text"), str):
+        return item.get("text")
+    if isinstance(event, dict) and event.get("type") == "result" and event.get("is_error") is not True and isinstance(event.get("result"), str):
+        return event["result"]
+    return None
 
 
 def is_turn_completed_event(raw_line):
@@ -423,7 +456,11 @@ def is_turn_completed_event(raw_line):
         event = json.loads(raw_line)
     except (TypeError, json.JSONDecodeError):
         return False
-    return isinstance(event, dict) and event.get("type") == "turn.completed"
+    if not isinstance(event, dict):
+        return False
+    if event.get("type") == "turn.completed":
+        return True
+    return event.get("type") == "result" and event.get("is_error") is not True
 
 
 def matching_benchmark_agent_message(raw_line):
@@ -486,6 +523,8 @@ def run_streaming_result_process(command, execution_prompt, args, command_enviro
                     stdout_event = None
                 if isinstance(stdout_event, dict) and stdout_event.get("type") == "thread.started" and isinstance(stdout_event.get("thread_id"), str) and stdout_event["thread_id"] and stdout_event["thread_id"] not in thread_ids:
                     thread_ids.append(stdout_event["thread_id"])
+                elif isinstance(stdout_event, dict) and stdout_event.get("type") == "result" and isinstance(stdout_event.get("session_id"), str) and stdout_event["session_id"] and stdout_event["session_id"] not in thread_ids:
+                    thread_ids.append(stdout_event["session_id"])
                 agent_message = completed_agent_message(raw_line)
                 if agent_message is not None:
                     agent_messages.append(agent_message)
@@ -692,13 +731,21 @@ def run_receipt(args, prompt_text):
         resolved_model = None
         resolved_effort = None
         effective_model = None
+    claude_runtime_identity = False
+    if not has_turn_context and stdout_summary.get("claude_model_ids"):
+        alias = str(args.model).lower()
+        if any(alias and alias in str(model_id).lower() for model_id in stdout_summary["claude_model_ids"]):
+            resolved_model = args.model
+            resolved_effort = args.effort
+            effective_model = args.model
+            claude_runtime_identity = True
     usage = normalize_usage(rollout["usage"] or stdout_summary["usage"])
     allowed_models = {model for model, _ in allowed_pairs}
     allowed_efforts = {effort for _, effort in allowed_pairs}
     model_match = resolved_model in allowed_models
     effort_match = resolved_effort in allowed_efforts
     pair_match = (effective_model, resolved_effort) in allowed_pairs if effective_model and resolved_effort else False
-    token_consistent = thread_state is not None and usage["total_tokens"] == thread_state.get("tokens_used")
+    token_consistent = (thread_state is not None and usage["total_tokens"] == thread_state.get("tokens_used")) or (claude_runtime_identity and thread_state is None and isinstance(usage["total_tokens"], int) and usage["total_tokens"] > 0)
     streamed_result_required = benchmark_stream_ready or stream_result_ready
     streamed_result_match = not streamed_result_required or streamed_matching_result is not None
     status = "pass" if not timed_out and process.returncode == 0 and stdout_summary["turn_completed"] and not stdout_summary["turn_failed"] and pair_match and token_consistent and streamed_result_match and not duplicate_result_detected else "fail"
@@ -708,7 +755,7 @@ def run_receipt(args, prompt_text):
     attempt = route_attempt_summary(requested_pair=requested_pair, resolved_pair=(resolved_model, resolved_effort) if resolved_model and resolved_effort else None, effective_pair=(effective_model, resolved_effort) if effective_model and resolved_effort else None, status=status, model_match=model_match, effort_match=effort_match, pair_match=pair_match, process_elapsed_ms=elapsed_ms, task_complete=task_complete, execution_failure_class=failure_class, tokens=usage, thread_id=stdout_summary["thread_id"])
     if status == "pass":
         failure_class = None
-    receipt = {"schema_version": 1, "proof_level": "local-operational-not-cryptographic", "workload_id": args.workload_id, "node_type": receipt_node_type(args), **authorization, "workload_prompt_sha256": sha256_text(prompt_text), "prompt_sha256": sha256_text(execution_prompt), "output_sha256": stdout_summary["output_hash"], "thread_id": stdout_summary["thread_id"], "requested_model": args.model, "requested_effort": args.effort, "requested_pair": f"{args.model}|{args.effort}", "resolved_model": resolved_model, "resolved_effort": resolved_effort, "effective_model": effective_model, "effective_pair": f"{effective_model}|{resolved_effort}" if effective_model and resolved_effort else None, "reroutes": reroutes, "allowed_fallback_pairs": allowed_fallback_pairs, "model_match": model_match, "effort_match": effort_match, "pair_match": pair_match, "tokens": usage, "metrics_complete": not timed_out and stdout_summary["turn_completed"] and token_consistent, "tokens_lower_bound": timed_out and usage["total_tokens"] is not None, "pre_execution_failure": False, "availability": rollout.get("availability"), "state_tokens_used": (thread_state or {}).get("tokens_used"), "token_total_consistent": token_consistent, "model_turn_duration_ms": task_complete.get("duration_ms"), "time_to_first_token_ms": task_complete.get("time_to_first_token_ms"), "process_elapsed_ms": elapsed_ms, "exit_code": process.returncode if process is not None else None, "turn_completed": False if timed_out else stdout_summary["turn_completed"], "stderr_line_count": len(process_stderr.splitlines()), "cli_version": (thread_state or {}).get("cli_version"), "model_provider": (thread_state or {}).get("model_provider"), "source": (thread_state or {}).get("source"), "status": status, "recorded_at": datetime.now(timezone.utc).isoformat(), "limitations": "Resolved/effective values come from local Claude Code runtime metadata and reroute events; this is not a cryptographically signed backend attestation."}
+    receipt = {"schema_version": 1, "proof_level": "local-operational-not-cryptographic", "workload_id": args.workload_id, "node_type": receipt_node_type(args), **authorization, "workload_prompt_sha256": sha256_text(prompt_text), "prompt_sha256": sha256_text(execution_prompt), "output_sha256": stdout_summary["output_hash"], "thread_id": stdout_summary["thread_id"], "requested_model": args.model, "requested_effort": args.effort, "requested_pair": f"{args.model}|{args.effort}", "resolved_model": resolved_model, "resolved_effort": resolved_effort, "effective_model": effective_model, "effective_pair": f"{effective_model}|{resolved_effort}" if effective_model and resolved_effort else None, "reroutes": reroutes, "allowed_fallback_pairs": allowed_fallback_pairs, "model_match": model_match, "effort_match": effort_match, "pair_match": pair_match, "tokens": usage, "metrics_complete": not timed_out and stdout_summary["turn_completed"] and token_consistent, "tokens_lower_bound": timed_out and usage["total_tokens"] is not None, "pre_execution_failure": False, "availability": rollout.get("availability"), "state_tokens_used": (thread_state or {}).get("tokens_used"), "token_total_consistent": token_consistent, "model_turn_duration_ms": task_complete.get("duration_ms"), "time_to_first_token_ms": task_complete.get("time_to_first_token_ms"), "process_elapsed_ms": elapsed_ms, "exit_code": process.returncode if process is not None else None, "turn_completed": False if timed_out else stdout_summary["turn_completed"], "stderr_line_count": len(process_stderr.splitlines()), "cli_version": (thread_state or {}).get("cli_version"), "model_provider": (thread_state or {}).get("model_provider"), "source": (thread_state or {}).get("source"), "status": status, "recorded_at": datetime.now(timezone.utc).isoformat(), "runtime_identity_source": "claude_cli_result_model_usage" if claude_runtime_identity else "thread_state_rollout" if has_turn_context else None, "effort_applied": False if claude_runtime_identity else None, "claude_model_ids": stdout_summary.get("claude_model_ids") or [], "limitations": "Resolved/effective values come from local Claude Code runtime metadata and reroute events; this is not a cryptographically signed backend attestation."}
     if getattr(args, "direct_task", False) or getattr(args, "bootstrap_task", False):
         receipt["benchmark_run_id"] = args.benchmark_run_id
     receipt["failure_class"] = failure_class

@@ -113,6 +113,33 @@
     "xhigh",
     "max"
   ],
+  "complexity_scale": {
+    "minimum": 0,
+    "maximum": 100,
+    "bands": [
+      {
+        "id": "small",
+        "minimum": 0,
+        "maximum": 24
+      },
+      {
+        "id": "standard",
+        "minimum": 25,
+        "maximum": 49
+      },
+      {
+        "id": "complex",
+        "minimum": 50,
+        "maximum": 74
+      },
+      {
+        "id": "advanced",
+        "minimum": 75,
+        "maximum": 100
+      }
+    ],
+    "quality_complex_threshold": 50
+  },
   "role_models": {
     "weak": "sonnet",
     "balanced": "opus",
@@ -134,14 +161,16 @@
     "operational_failures_are_neutral": true,
     "freeze_lowest_verified_pair": true,
     "priority_producer_first_text_code": false,
-    "priority_producer_scheduled_sources_only": true,
+    "priority_producer_first_small_edits": true,
+    "priority_producer_scheduled_sources": true,
+    "priority_producer_scheduled_sources_only": false,
     "minimum_pair": "sonnet|low"
   },
   "priority_producer": {
     "enabled": true,
     "id": "haiku",
     "display_name": "Claude Haiku",
-    "routing_role": "scheduled_independent_source_branch",
+    "routing_role": "small_edit_priority_or_scheduled_source_branch",
     "provider_priority": 4,
     "provider_positioning": "Priority producer; fast and cost-efficient.",
     "supported_in_api": true,
@@ -181,6 +210,24 @@
     "eligible_modalities": [
       "text"
     ],
+    "small_edit_task_types": [
+      "document",
+      "prompt",
+      "code",
+      "script",
+      "normal-script-update",
+      "documentation-instructions"
+    ],
+    "small_edit_operations": [
+      "edit",
+      "fix",
+      "modify",
+      "rename",
+      "replace",
+      "update",
+      "write"
+    ],
+    "small_edit_maximum_complexity_score": 24,
     "excluded_operations": [
       "audit",
       "lookup",
@@ -189,8 +236,8 @@
       "status",
       "verify"
     ],
-    "operational_fallback": "fail_scheduled_graph",
-    "quality_failure": "fail_scheduled_graph"
+    "operational_fallback": "contextual_quality_pair",
+    "quality_failure": "suppress_matching_complexity_band_and_upgrade"
   },
   "private_learning_contract": {
     "authority": "obsidian_broad_claude_model_switch",

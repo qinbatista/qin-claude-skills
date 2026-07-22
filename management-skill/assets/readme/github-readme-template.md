@@ -2,13 +2,13 @@
 
 # 🚀 Auto Best Model
 
-**Claude Code-only · finish the job first · verify afterward in a separate background task**
+**Claude Code-only · score every task · finish the job first · prove it with mandatory Ending tasks**
 
 [中文说明](./README.zh.md)
 
 Saved `haiku → sonnet → opus → fable` quality ladder · refreshed only when you request a local model update
 
-Ordinary Auto starts from the task-strategy quality pair, not `fable|max` · `haiku` is schedule-branch-only
+Small low-risk edits scoring 0–24 try `haiku`-low first · larger work uses the saved quality ladder
 
 Sibling of the Codex-only origin [`qin-codex-skills`](https://github.com/qinbatista/qin-codex-skills) (v34, 8 public skills) · this edition ports the same lifecycle to Claude Code and adds `auto-model-for-claude`
 
@@ -18,19 +18,19 @@ Sibling of the Codex-only origin [`qin-codex-skills`](https://github.com/qinbati
 
 <picture>
   <source media="(max-width: 600px)" srcset="./management-skill/assets/readme/core-flow-mobile.svg">
-  <img src="./management-skill/assets/readme/core-flow.svg" alt="Core flow: finish and return the main job first, then start a separate nonblocking background Ending task">
+  <img src="./management-skill/assets/readme/core-flow.svg" alt="Core flow: score and finish the main job, then run mandatory scored Ending tasks for independent real checks">
 </picture>
 
-## ✅ Finish first. Verify in background.
+## ✅ Finish first. Run mandatory real verification.
 
 This is the lifecycle's most important structural rule, unchanged from the Codex origin:
 
-1. **Main task finishes the requested job** and runs only the proportional local check that belongs to implementation.
+1. **Score every submission from 0–100, then finish the requested job** and run the proportional implementation check.
 2. **Return the completed result immediately.** The user is not held inside a verifier, poll loop, or repair cycle.
-3. **Start `End Task-<task name>` as a separate background agent.** It audits existing evidence read-only and never blocks the completed main result.
-4. **Ending reports PASS or the exact failure.** It does not ask the user questions, wait, poll, call heavy APIs, or repair inside the Ending task; a failure reopens a new repair task with a different verifier.
+3. **Start one scored/model-routed `End Task-<task name>-<check>` background agent per independent real test, API check, or render.** Dependent checks stay ordered instead of being fragmented.
+4. **Every Ending executes its assigned real check and all required checks must PASS.** Failure creates a Fix Task with the exact error, then a fresh End Task reruns the check, for up to three repairs.
 
-Main work and Ending verification are deliberately different agent runs. "Background" means the user can continue working as soon as the main result is returned -- it does not mean verification is skipped.
+Main work and Ending verification are deliberately different agent runs. A summary is never verification: heavy changes need real tests, API evidence, builds, renders, or visual checks appropriate to the change.
 
 ## ⚡ Models & private learning
 
@@ -39,22 +39,22 @@ Main work and Ending verification are deliberately different agent runs. "Backgr
   <img src="./management-skill/assets/readme/model-router.svg" alt="Task-strategy quality ladder that retains, downgrades, or upgrades one receipt-proven rung at a time">
 </picture>
 
-- **Cold start:** Task type and complexity select a saved `sonnet`/`opus`/`fable` quality pair; ordinary work never defaults to `haiku` or permanently stays on `fable|max`.
-- **Learning:** One receipt-valid Real PASS retains the pair; two matched PASS outcomes try one weaker rung; a quality failure upgrades one rung immediately.
+- **Cold start:** Task type and the 0–100 score select a saved `sonnet`/`opus`/`fable` quality pair; small low-risk edits scoring 0–24 try `haiku`-low first.
+- **Learning:** One receipt-valid Real PASS retains the pair; two matched PASS outcomes try one weaker rung; a quality failure upgrades one rung immediately. A `haiku` quality failure suppresses `haiku` for the matching context and upgrades the next task.
 - **Operational:** A zero-result failure gets one stronger fallback and is not learned as a quality failure.
-- **Scheduling:** `haiku` is limited to independent source branches after a pre-read cost gate. Small multi-file work stays with one contextual producer when fan-out would repeat session context.
+- **Scheduling:** Two or three independent read-only sources are cost-admitted before reads; dependent multi-file work stays with one contextual producer.
 - **Memory:** Ending outcomes update broad project/Skills **`Claude Model Switch.md`** pages; project/task/module/file/symbol are fields only -- no hierarchy notes. This page name is exclusive to this Claude Code edition and is never shared with Codex's own `Model Switch.md` learner.
 
 ## Rules
 
-- **Producer:** Use the saved task-strategy pair; 1 PASS retains, 2 matched PASS descend one rung, and quality failure climbs one rung.
+- **Producer:** Show score/band + route change. Eligible 0–24 low-risk edits try `haiku`-low; otherwise use saved pair. Two PASS descend; quality FAIL ascends.
 - **Prompt:** Reusable prompts and durable AI instructions load Prompt Skill.
 - **Route:** Delegate only on explicit request or current end-to-end proof.
 - **Deliver:** Finish and return the completed main result before background verification.
-- **Verify:** Launch a separate, nonblocking `End Task-<task name>` after delivery; first-result time excludes it.
+- **Verify:** Mandatory: one scored/model-routed `End Task-<task name>-<check>` per independent check; all must PASS. FAIL → Fix Task + fresh End Task, up to three.
 - **Files:** Recall project/module/file history before editing; record the verified change after.
 - **Memory:** Change history is local JSONL + optional Obsidian; private learning uses broad project/Skills `Claude Model Switch.md`: fields only; no hierarchy notes.
-- **Models:** Use the saved ladder; explicit model update refreshes it from Claude Code's documented aliases; `haiku` is schedule-only; missing cache preserves the list.
+- **Models:** Use the saved ladder; explicit model update refreshes it from Claude Code's documented aliases; eligible small edits prioritize `haiku`-low; missing cache preserves it.
 - **Privacy:** Secrets, raw prompts/results, receipts, ledgers, caches, and work artifacts stay local.
 
 ## 📊 Lifecycle benchmark: upstream Codex-measured reference evidence
@@ -67,7 +67,7 @@ Main work and Ending verification are deliberately different agent runs. "Backgr
 > (`scripts/render_lifecycle_benchmark.py` plus its tests) exists so a real Claude Code
 > cohort can be run and published later.
 
-Both arms enter `gpt-5.6-sol | ultra`. **Without skill** finishes and stops; verification cost is **0**. **With skill** executes the task on the receipt-proven dynamic pair, returns it, then launches a separate read-only Ending task that never blocks delivery.
+Both arms enter `gpt-5.6-sol | ultra`. **Without skill** finishes and stops; verification cost is **0**. **With skill** executes the task on the receipt-proven dynamic pair, returns it, then launches separate Ending verification. **Frozen evidence notice:** The table is the unchanged 2026-07-17 upstream v34 cohort. The current score-based `haiku` priority and mandatory multi-Ending/repair can change future Auto outcomes; they do not rewrite these values, the fixed Direct arm, or task-versus-task-plus-Ending accounting.
 
 ![Six real A/B pairs comparing Direct task, Auto task, and striped Auto-only Ending cost (upstream Codex measurement)](./management-skill/assets/readme/lifecycle-skill-benchmark.svg)
 
