@@ -459,10 +459,11 @@ class ValidateTaskAnalyzeSkillTests(unittest.TestCase):
             for required_term in module.REQUIRED_GLOBAL_BOOTSTRAP_TEXT:
                 self.assertIn(required_term, bootstrap_text)
             self.assertIn("Producer owns files/skills/Mini Test", bootstrap_text)
-            self.assertIn("Agent(run_in_background:true,ENDING_TASK_WORKER)", bootstrap_text)
+            self.assertIn("Agent(run_in_background:false,ENDING_TASK_WORKER)", bootstrap_text)
             self.assertIn("one own scored/model End Task per independent real test/API/render", bootstrap_text)
             self.assertIn("FAIL creates Fix Task with exact error then fresh End Task", bootstrap_text)
-            self.assertIn("never same-task subtask/emulate/wait/self-verify", bootstrap_text)
+            self.assertIn("never emulate or self-verify", bootstrap_text)
+            self.assertIn("NEVER report done/complete/ready", bootstrap_text)
             self.assertIn("all checks must PASS", bootstrap_text)
             self.assertIn("BLOCKED only unavailable/external/limit", bootstrap_text)
             self.assertIn("`fable|max`", bootstrap_text)

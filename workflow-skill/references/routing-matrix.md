@@ -4,7 +4,7 @@ Eligible ordinary text/code production enters the compact adaptive runner exactl
 
 | Scenario | Use when | Foreground route | Model pattern | First presentation | Ending Task |
 |---|---|---|---|---|---|
-| ordinary-production | One eligible text/code result, edit, or implementation. | entry bootstrap -> adaptive producer -> result | Saved contextual quality pair; one stronger fallback only after zero result. | For code, run one bounded Quick Check; then present. | Create `End Task-{related task}` background Agent and return without waiting. |
+| ordinary-production | One eligible text/code result, edit, or implementation. | entry bootstrap -> adaptive producer -> result | Saved contextual quality pair; one stronger fallback only after zero result. | For code, run one bounded Quick Check; then present. | Create and await `End Task-{related task}` Agent before reporting done. |
 | exact-one-source-read | One exact named-source read-only result. | one bounded inline read -> result | Current entry model; no producer receipt or graph. | Present immediately after the single bounded read. | Create the separate Ending task only when task tools are callable. |
 | tool-only-action | Open, navigate, send a bounded tool command, or inspect current tool state. | inline tool -> result | No model-generated producer route. | Report the observable result immediately. | Re-observe state when verification is applicable; never repeat a destructive action. |
 | image-or-mixed | The work requires image generation/editing or a mixed visual tool surface. | inline owning image/tool skill -> result | Use the owning tool contract; no fabricated producer receipt. | Present the generated or edited artifact. | Real render/artifact check when observable verification applies. |
@@ -14,9 +14,9 @@ Eligible ordinary text/code production enters the compact adaptive runner exactl
 | independent-large-sources | Context pressure exceeds the source budget or parallel latency is explicitly required. | entry bootstrap -> admitted source graph -> adaptive merge -> result | Priority producer source branches plus the contextual merge pair; every stage receipted. | Present the merged exact result. | Validate the aggregate receipt and immutable evidence. |
 | dependent-multi-file | Edits or evidence depend on shared state across files. | one adaptive producer -> owning skill -> result | Never split dependency-coupled work merely because it has many files. | Present completed result after proportional Quick Check. | Split independent verification surfaces; order shared-state checks. |
 | explicit-routing-no-graph | User asks for routing but no multi-node graph passes admission. | Task Analyze -> one contextual producer -> result | Quality selection still applies; no open-ended graph. | Present result immediately. | Real verdict and learning after presentation. |
-| task-analyze-maintenance | Maintain routing contracts, runners, or benchmark assets. | adaptive producer -> Task Analyze -> owning code/docs skills -> result | One dependency-coupled producer owns files, tests, report, and handoff. | Present completed change and focused test evidence. | New persistent Ending task; origin never waits. |
+| task-analyze-maintenance | Maintain routing contracts, runners, or benchmark assets. | adaptive producer -> Task Analyze -> owning code/docs skills -> result | One dependency-coupled producer owns files, tests, report, and handoff. | Present completed change and focused test evidence. | New Ending task; origin awaits its verdict. |
 | explicit-benchmark | User authorizes Direct versus Auto calibration. | Task Analyze -> fixed Direct and receipt-proven Auto arms -> report | Both entries use the declared pair; Direct has no verifier; Auto task and Ending are separated. | First-result timestamp stops at exact result availability. | Ending cost is later and explicit; controller is a disclosed diagnostic. |
-| admitted-complex | Current evidence admits a real dependency graph. | Task Analyze -> Workflow -> dependency-ready locked nodes -> result | Exact locked pairs; one execution surface per branch. | Release merged completed result. | Real Verify after release; no foreground gate. |
+| admitted-complex | Current evidence admits a real dependency graph. | Task Analyze -> Workflow -> dependency-ready locked nodes -> result | Exact locked pairs; one execution surface per branch. | Release merged completed result. | Real Verify after release, awaited before the done claim. |
 
 ## Goal Rules
 
@@ -27,7 +27,7 @@ Eligible ordinary text/code production enters the compact adaptive runner exactl
 - Full Task Analyze activates only for explicit routing/benchmark/maintenance or graph evaluation; activation alone does not admit an open-ended graph.
 - Every active registry-owned code-domain implementation uses `code-skill`.
 - Main Result and proportional Quick Check precede all Ending verification.
-- The origin creates and links one persistent background Agent End Task per independent real check, then returns without polling. FAIL creates a separate repair task and fresh verifier.
+- The origin creates and awaits one Agent End Task per independent real check, and never reports done while a check is unrun, pending, or failing. FAIL creates a separate repair task and fresh verifier.
 - Runtime receipts prove observed routing; labels and availability probes do not.
 - Direct uses the exact raw prompt through `--direct-task`; Auto uses it through `--bootstrap-task`.
 - The public two-world comparison is Direct task with zero verifier versus Auto task plus separate Ending. The common entry/controller dispatcher is disclosed but excluded from those task/check worlds.

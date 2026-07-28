@@ -13,10 +13,14 @@ manage_auth_profiles = importlib.util.module_from_spec(MODULE_SPEC)
 MODULE_SPEC.loader.exec_module(manage_auth_profiles)
 
 
+# Fixture tokens stay short on purpose: the public-mirror scanner in
+# sync_global_skills.py rejects any `sk-` value with 20+ trailing token characters, so a
+# longer fake would block every push. Keep the `sk-ant-oat01`/`sk-ant-ort01` prefixes --
+# the masking assertions below check for them directly.
 FAKE_CREDENTIAL_PAYLOAD = {
     "claudeAiOauth": {
-        "accessToken": "sk-ant-oat01-not-a-real-secret",
-        "refreshToken": "sk-ant-ort01-not-a-real-secret",
+        "accessToken": "sk-ant-oat01-not-real",
+        "refreshToken": "sk-ant-ort01-not-real",
         "expiresAt": 4102444800000,  # 2100-01-01T00:00:00Z, far future -> not expired
         "refreshTokenExpiresAt": 4104000000000,
         "scopes": ["user:inference", "user:profile"],
@@ -57,7 +61,7 @@ class NoSecretLeakMixin:
         blob = json.dumps(obj)
         self.assertNotIn("accessToken", blob)
         self.assertNotIn("refreshToken", blob)
-        self.assertNotIn("not-a-real-secret", blob)
+        self.assertNotIn("not-real", blob)
         self.assertNotIn("sk-ant-oat01", blob)
         self.assertNotIn("sk-ant-ort01", blob)
 

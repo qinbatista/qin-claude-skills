@@ -124,11 +124,11 @@ REQUIRED_SKILL_TEXT = [
     "no separate foreground self-review, Mini, or verification pass",
     "Show the requested result immediately after that check",
     "Quick Check (the user-facing Mini Test)",
-    "Agent tool with `run_in_background: true` is callable",
+    "When the Agent tool is callable, run those checks with `run_in_background: false` and await them",
     "Never inspect or invoke app-server internals",
-    "outer host must create the persistent End Task",
-    "substitute a same-task subtask",
-    "origin final is complete after the result presentation",
+    "outer host must create the End Tasks",
+    "let the producer verify itself",
+    "origin final is complete only after the End Task reports",
     "concurrent or missing evidence is terminal BLOCKED, not a user question",
     "End-to-End Performance Admission",
     "exactly two worlds",
@@ -305,9 +305,9 @@ REQUIRED_RECEIPT_GUARD_IMPLEMENTATION = [
     "recursive_entry_task_forbidden",
     "entry_context_adaptive_runner_required",
 ]
-REQUIRED_GLOBAL_BOOTSTRAP_TEXT = ["# Task Lifecycle", "Score every submission 0-100", "small 0-24", "standard 25-49", "complex 50-74", "advanced 75-100", "show `Complexity:N/100 (band)` and route change", "pipe exact user text once non-TTY to `/usr/bin/python3", "obsidian_adaptive_model_runner.py", "before skills/memory/files", "Exact one-source/tool/image:use `task_complexity_score.py`", "Small low-risk edit score<=24:Haiku-low first", "Ending quality FAIL suppresses Haiku", "next task upgrades to saved quality pair", "2 Real PASS down 1 rung", "quality FAIL up 1", "zero-result failure one stronger fallback", "Missing Obsidian uses saved cold start", "2-3 independent read-only sources cost-admit before reads", "dependent multi-file one producer", "Producer owns files/skills/Mini Test", "heavy/API/large/side-effect checks syntax+names/references", "End Task hard-required", "scored local ledger", "Agent(run_in_background:true,ENDING_TASK_WORKER)", "`ending_verification_plan.py`", "one own scored/model End Task per independent real test/API/render", "all checks must PASS", "FAIL creates Fix Task with exact error then fresh End Task", "up to 3 repairs", "BLOCKED only unavailable/external/limit", "never same-task subtask/emulate/wait/self-verify", "Terminal events sync local history+Obsidian Claude Model Switch", "Benchmark 3 tiers", "`fable|max`", "Direct fixed/no verify", "Auto receipt=child/graph", "task vs task+Ending", "controller excluded", "No hook", "Final PASS/BLOCKED Ending-only"]
+REQUIRED_GLOBAL_BOOTSTRAP_TEXT = ["# Task Lifecycle", "Score every submission 0-100", "small 0-24", "standard 25-49", "complex 50-74", "advanced 75-100", "show `Complexity:N/100 (band)` and route change", "pipe exact user text once non-TTY to `/usr/bin/python3", "obsidian_adaptive_model_runner.py", "before skills/memory/files", "Exact one-source/tool/image:use `task_complexity_score.py`", "Small low-risk edit score<=24:Haiku-low first", "Ending quality FAIL suppresses Haiku", "next task upgrades to saved quality pair", "2 Real PASS down 1 rung", "quality FAIL up 1", "zero-result failure one stronger fallback", "Missing Obsidian uses saved cold start", "2-3 independent read-only sources cost-admit before reads", "dependent multi-file one producer", "Producer owns files/skills/Mini Test", "heavy/API/large/side-effect checks syntax+names/references", "End Task hard-required", "scored local ledger", "Agent(run_in_background:false,ENDING_TASK_WORKER)", "`ending_verification_plan.py`", "one own scored/model End Task per independent real test/API/render", "all checks must PASS", "FAIL creates Fix Task with exact error then fresh End Task", "up to 3 repairs", "BLOCKED only unavailable/external/limit", "never emulate or self-verify", "NEVER report done/complete/ready", "Terminal events sync local history+Obsidian Claude Model Switch", "Benchmark 3 tiers", "`fable|max`", "Direct fixed/no verify", "Auto receipt=child/graph", "task vs task+Ending", "controller excluded", "No hook", "Final PASS/BLOCKED Ending-only"]
 REQUIRED_GLOBAL_ENTRY_ASSET_TEXT = ["Merge this section into `~/.claude/CLAUDE.md`"] + REQUIRED_GLOBAL_BOOTSTRAP_TEXT
-REQUIRED_PYTHON_REFERENCE_TEXT = ["## Quick Check And Detached Ending", "Before presenting a light/local Python edit", "build real proportional Ending checks", "Every required check must PASS", "separate scoped repair task", "fresh verifier"]
+REQUIRED_PYTHON_REFERENCE_TEXT = ["## Quick Check And Awaited Ending", "Before presenting a light/local Python edit", "build real proportional Ending checks", "Every required check must PASS", "separate scoped repair task", "fresh verifier"]
 REQUIRED_CSHARP_REFERENCE_TEXT = ["Before presentation, run the smallest safe local smoke", "skip the heavy producer run and check syntax plus changed method, variable, namespace, and direct-reference names", "separate scored/modelled End Tasks", "All required checks must PASS", "fresh verifier"]
 REQUIRED_UNITY_REFERENCE_TEXT = ["uses this file plus", "Return the final updated C# code first"]
 REQUIRED_PROMPT_SKILL_TEXT = ["Always use for every task", "100% global prompt-task gate across projects", "Ordinary prose does not trigger it", "Prompt-in-code also loads its owning code executor", "Present the completed prompt or instruction artifact immediately", "mandatory scored Ending lifecycle", "ending_verification_plan.py", "fresh verifier"]

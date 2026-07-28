@@ -1,17 +1,17 @@
 ---
 name: verify-skill
-description: "Use only for explicitly requested verification as the task itself, or for post-result Ending Task Real Verify in a separate background Agent task. A producer-side bounded Quick Check may precede code presentation; it is not independent verification."
+description: "Use only for explicitly requested verification as the task itself, or for post-result Ending Task Real Verify in a separate awaited Agent. A producer-side bounded Quick Check may precede code presentation; it is not independent verification."
 ---
 
 # Verify Skill
 
-Verification has two scopes: user-requested verification as the task itself, and post-result Ending Real Verify. End Task is hard-required. When the result needs verification—code/file changes, bug fixes, generated artifacts, UI/render behavior, integrations, or external actions—Ending must execute a real proportional test against the changed result; a receipt summary alone cannot PASS. Build the plan with `scripts/ending_verification_plan.py`. Give every independent check its own persistent `End Task-{task}-{check}` background Agent task (`run_in_background: true`, prompt starting `ENDING_TASK_WORKER`) and select that task's model/effort from its own `0-100` check score. All required checks must PASS. Code producers still apply the bounded Quick Check before presentation; Ending is the independent proof. Follow `references/ending-lifecycle.md`.
+Verification has two scopes: user-requested verification as the task itself, and post-result Ending Real Verify. End Task is hard-required. When the result needs verification—code/file changes, bug fixes, generated artifacts, UI/render behavior, integrations, or external actions—Ending must execute a real proportional test against the changed result; a receipt summary alone cannot PASS. Build the plan with `scripts/ending_verification_plan.py`. Give every independent check its own `End Task-{task}-{check}` Agent, launched with `run_in_background: false` and awaited in the same turn (prompt starting `ENDING_TASK_WORKER`), and select that task's model/effort from its own `0-100` check score. All required checks must PASS before the work is reported done. Code producers still apply the bounded Quick Check before presentation; Ending is the independent proof. Follow `references/ending-lifecycle.md`.
 
 When the producer can express acceptance as an exact command, test, API probe, render check, receipt, JSON, exit-code, count, or digest, put the real command in `ending_verification_plan.py plan`. Each Ending worker executes only its assigned `run-check`, preserves stdout/stderr/exit code in evidence, and records PASS only when the command meets its expected result. `ending_evidence_manifest.py` may bind immutable inputs, but validating a manifest never replaces the real test.
 
 Never add a broad verifier before the user's first presentation. After presentation, Ending may run the real proportional unit, integration, API, build, render, visual, or state test required to prove the result. Keep each check focused; do not substitute prose inspection for an executable or observable check when one exists.
 
-A same-task subagent is forbidden for Ending because it keeps the origin task active and blocks on it — a foreground/synchronous subagent is exactly that forbidden shape. Use `Agent` with `run_in_background: true`, a prompt starting `ENDING_TASK_WORKER`, and `description` set exactly to the required title. The global lifecycle authorizes this background task. In a headless, worker, or benchmark execution surface where `Agent` is not callable, record and disclose terminal `BLOCKED` with the exact outer-host handoff; do not silently mark the Ending lifecycle complete, substitute a same-task subagent, or start a wait loop.
+Ending blocks the origin on purpose: the origin stays active until every required check has reported. Use `Agent` with `run_in_background: false`, a prompt starting `ENDING_TASK_WORKER`, and `description` set exactly to the required title, then await its verdict before any completion claim. The verifier must be a different agent/model from the producer — that independence, not detachment, is what makes it valid. Detached `run_in_background: true` is allowed only for a skill's own explicitly declared verify step, never for the general Ending lifecycle. In a headless, worker, or benchmark execution surface where `Agent` is not callable, record and disclose terminal `BLOCKED` with the exact outer-host handoff; do not silently mark the Ending lifecycle complete or let the producer verify itself.
 
 When the user explicitly asks for a test, audit, review, replay, or verification as the primary task, that work is the requested result and runs normally on the current model. It does not need a fabricated pre-result verification phase.
 
@@ -20,35 +20,36 @@ When the user explicitly asks for a test, audit, review, replay, or verification
 The required order is:
 
 1. producer completes the requested result and, for code, runs one bounded Quick Check;
-2. show the result immediately with Quick Check PASS/SKIPPED evidence;
+2. show the result immediately with Quick Check PASS/SKIPPED evidence, labelled `MAIN RESULT READY` — a progress presentation, never a completion claim;
 3. classify whether Real Verify is required; when required, build one plan containing the exact real checks and an independent score/model pair per check;
-4. write a scored lifecycle receipt, bind `--producer-receipt` when present, then call `Agent` with `run_in_background: true`, a prompt starting `ENDING_TASK_WORKER`, and `description` exactly `End Task-{task}-{check}` for each independent plan check;
+4. write a scored lifecycle receipt, bind `--producer-receipt` when present, then call `Agent` with `run_in_background: false`, a prompt starting `ENDING_TASK_WORKER`, and `description` exactly `End Task-{task}-{check}` for each independent plan check, and await every one;
 5. run each assigned real check and require all checks to PASS;
 6. on FAIL, record the exact command, exit code, stdout/stderr, and failure class, then automatically create `Fix Task-{task}-{check}` with that error and the allowed files; after repair, create a fresh Ending task with the same acceptance check;
 7. repeat the repair/reverify loop for at most three repair attempts; use BLOCKED only for unavailable infrastructure, external state, timeout, or exhausted repair limit;
 8. let every terminal ledger event record local history and let receipt-backed producer PASS/FAIL update Obsidian model learning.
 
-First-result latency includes Quick Check and ends at step 2. Ending time is recorded separately. The origin returns after launching the background Ending Agent tasks and does not poll. The lifecycle is verified only when every required check and any repair's fresh recheck PASS; BLOCKED does not count as verified. A tool's own producer-side state may be Quick Check evidence, but independent Ending must observe the completed result again.
+First-result latency includes Quick Check and ends at step 2. Ending time is recorded separately. The origin does not return until every required check has reported; it never hands the turn back with a check unrun or pending. The lifecycle is verified only when every required check and any repair's fresh recheck PASS; BLOCKED does not count as verified. A tool's own producer-side state may be Quick Check evidence, but independent Ending must observe the completed result again.
 
-## Background End Task Agent
+## Awaited End Task Agent
 
 - Build a plan with one check object per independent acceptance surface. Separate unit, integration/API, render/visual, and live-state checks when they do not share mutable state.
-- Call `Agent` with `run_in_background: true` once per check; pass lifecycle ID, plan/check ID, exact command, score/band, selected model/effort, receipts, project root, touched files, and allowed repair scope in a prompt starting `ENDING_TASK_WORKER`, with `description` exactly the check's `End Task-{task}-{check}` title (pass the selected model via the `model` parameter).
+- Call `Agent` with `run_in_background: false` once per check and await it; pass lifecycle ID, plan/check ID, exact command, score/band, selected model/effort, receipts, project root, touched files, and allowed repair scope in a prompt starting `ENDING_TASK_WORKER`, with `description` exactly the check's `End Task-{task}-{check}` title (pass the selected model via the `model` parameter).
 - Select quality-ladder roles by check score: small uses `weak_default`, standard `balanced_default`, complex `balanced_complex`, and advanced `frontier_complex`. `haiku` remains a small-edit producer, not an Ending verifier.
 - Run `ending_verification_plan.py run-check`; do not merely summarize prior Quick Check output. Independent safe checks may run concurrently. Shared-state checks remain ordered.
 - On failure, record terminal FAIL, create the repair task from `repair_handoff`, and require its new Ending task to rerun the original acceptance command. Never let the failing verifier edit the result itself.
-- If `Agent` is not callable — including on a headless, worker, or benchmark execution surface — record and disclose `BLOCKED: persistent End Task unavailable` plus the exact handoff; never substitute a same-task subagent or treat Ending as complete.
+- If `Agent` is not callable — including on a headless, worker, or benchmark execution surface — record and disclose `BLOCKED: End Task unavailable` plus the exact handoff; never let the producer verify itself or treat Ending as complete.
 
 ### Required Status Vocabulary
 
-- `MAIN RESULT READY`: producer work is complete, usable, and delivered.
-- `PASS`: every required real check observed the expected result.
+- `MAIN RESULT READY`: producer work is complete, usable, and delivered — not yet verified, and not a done claim.
+- `IN PROGRESS — not done`: a required check is unrun or still pending; name the outstanding check, keep working, and do not hand the turn back.
+- `PASS`: every required real check observed the expected result. Only PASS may be reported as done.
 - `FAIL`: a real check observed a defect and emitted a repair handoff.
 - `BLOCKED`: verification or repair could not run because of an external/unavailable condition or the three-attempt limit.
 
-Do not call code verified when the lifecycle is FAIL or BLOCKED.
+Do not call code verified — or done, complete, ready, or safe to build on — when the lifecycle is FAIL, BLOCKED, or still IN PROGRESS.
 
-The origin final is complete after result presentation. The End Task Agent's final requires lifecycle PASS or explicit BLOCKED. No hook is used or installed.
+The origin final is complete only after the End Task Agent returns lifecycle PASS or explicit BLOCKED. Result presentation alone does not end the turn. No hook is used or installed.
 
 ## Real Verify Scope
 
@@ -128,10 +129,10 @@ Create a formal report only when requested or when evidence is long, visual, com
 ## Guardrails
 
 - Never turn Quick Check into a broad test suite or independent acceptance claim.
-- Never use a same-task subagent for Ending.
+- Never let the producing agent verify its own work; Ending is always a separate agent/model.
 - Never substitute a progress update such as `implementation complete` for the required usable `MAIN RESULT READY` presentation.
 - Never combine unrelated independent checks into one vague verifier. One Ending task owns one check; safe independent checks may run concurrently.
-- Never hide task state behind repeated waits or ask the user to fix a verified code defect manually. Report `PASS`, `FAIL` with repair handoff, or `BLOCKED` with the exact external reason.
+- Never report done, and never hand the turn back for the next step, while a required check is unrun, pending, or FAILing. Report `PASS`, `FAIL` with repair handoff, `BLOCKED` with the exact external reason, or `IN PROGRESS — not done` with the outstanding check. Never ask the user to fix a verified code defect manually.
 - Verify the user's observable result, not only the attempted method.
 - Do not hide uncertainty or a blocked environment.
 - Do not claim a model ran without runtime evidence.

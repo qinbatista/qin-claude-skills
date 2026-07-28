@@ -48,10 +48,10 @@ Apply these rules whenever writing or editing Python modules, classes, functions
 - If an AI helper guarantees parsed JSON through `json_root="object"` or `json_root="array"`, use the returned `dict` or `list` directly with no `json.loads`, `ast.literal_eval`, string fallback, or duplicate parse check.
 - For AI extraction, naming, or review flows, put semantic rules in the prompt and keep local code limited to minimal schema normalization.
 
-## Quick Check And Detached Ending
+## Quick Check And Awaited Ending
 
 - Before presenting a light/local Python edit, run the smallest safe focused smoke that exercises the changed function. For API, large-file, expensive, destructive, or import-side-effect-heavy work, skip the heavy run; use `py_compile` or AST parsing plus direct changed function, variable, import, and reference checks.
-- Present `CODE READY` with Quick Check evidence, then build real proportional Ending checks. Launch one scored/modelled persistent detached background Agent (`run_in_background: true`, prompt starting `ENDING_TASK_WORKER`) per independent unit, integration/API, or runtime check and return without polling. Every required check must PASS.
+- Present `CODE READY` with Quick Check evidence, then build real proportional Ending checks. Launch one scored/modelled Agent (`run_in_background: false`, prompt starting `ENDING_TASK_WORKER`) per independent unit, integration/API, or runtime check and await each. Every required check must PASS before the code is reported done.
 - A failing verifier records the exact command/output/error and creates a separate scoped repair task. After repair, create a fresh verifier that reruns the original check; continue for at most three attempts. BLOCKED is not verified.
 - Record an optional simplification idea without editing only when the delivered behavior is already correct and no repair is required.
 

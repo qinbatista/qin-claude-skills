@@ -1,16 +1,16 @@
 # Mandatory Real-Test Ending Lifecycle
 
-Every user submission records a scored local Ending lifecycle. When the completed result needs verification—code/file edits, bug fixes, generated artifacts, UI/render work, integrations, or external actions—Ending executes real proportional checks in separate persistent background `Agent` tasks. Prior receipts or prose summaries alone cannot PASS.
+Every user submission records a scored local Ending lifecycle. When the completed result needs verification—code/file edits, bug fixes, generated artifacts, UI/render work, integrations, or external actions—Ending executes real proportional checks in separate awaited `Agent` tasks, and the work is not reported done until every one has passed. Prior receipts or prose summaries alone cannot PASS.
 
 ## Parent sequence
 
 1. Complete the result and run the producer Quick Check for code.
-2. Present `CODE READY` or `MAIN RESULT READY` with paths, complexity score/band, route change, and Quick Check evidence.
+2. Present `CODE READY` or `MAIN RESULT READY` with paths, complexity score/band, route change, and Quick Check evidence. This is a progress presentation, not a done claim.
 3. Define observable acceptance commands. Use `scripts/ending_verification_plan.py plan` with one check per independent unit, integration/API, build, render/visual, or live-state surface.
 4. Give every check its own complexity score. The planner selects `weak_default`, `balanced_default`, `balanced_complex`, or `frontier_complex`; `haiku` is not an Ending verifier.
 5. Start the local lifecycle with `--verification-required --verification-plan`, score/band, and `--producer-receipt` when present.
-6. Call `Agent` with `run_in_background: true`, a prompt starting exactly `ENDING_TASK_WORKER`, and `description` set to that check's `End Task-{task}-{check}` title, once per plan item, using the check's selected model and effort. Pass the exact `run-check` command, lifecycle/receipt paths, project root, touched files, and repair boundary. Safe independent checks may run concurrently; shared-state checks stay ordered.
-7. Link the tasks and return the origin without polling. If `Agent` is not callable — including on a headless, worker, or benchmark execution surface — emit the exact Ending handoff for the outer host; missing task creation is terminal BLOCKED and is not verification.
+6. Call `Agent` with `run_in_background: false`, a prompt starting exactly `ENDING_TASK_WORKER`, and `description` set to that check's `End Task-{task}-{check}` title, once per plan item, using the check's selected model and effort. Pass the exact `run-check` command, lifecycle/receipt paths, project root, touched files, and repair boundary. Safe independent checks may run concurrently; shared-state checks stay ordered.
+7. Await every task and report its verdict in the same turn. The origin never hands the turn back while a check is unrun or pending; until all report, the state is `IN PROGRESS — not done`. If `Agent` is not callable — including on a headless, worker, or benchmark execution surface — emit the exact Ending handoff for the outer host; missing task creation is terminal BLOCKED and is not verification.
 
 ## Real check PASS
 
@@ -34,7 +34,8 @@ The Ending worker runs `ending_verification_plan.py run-check` for its assigned 
 
 ## Status
 
-- `PASS`: all required real checks passed.
+- `IN PROGRESS — not done`: a required check is unrun or pending. Keep working; never report done or hand the turn back in this state.
+- `PASS`: all required real checks passed. Only PASS may be reported as done.
 - `FAIL`: a real check found a defect and a repair handoff was created.
 - `BLOCKED`: task creation, verification infrastructure, external state, timeout, or the repair limit prevented PASS.
 

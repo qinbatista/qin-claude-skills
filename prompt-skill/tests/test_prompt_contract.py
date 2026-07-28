@@ -3,6 +3,7 @@ import unittest
 
 
 PROMPT_SKILL_PATH = Path(__file__).resolve().parents[1] / "SKILL.md"
+CODE_PROMPT_REFERENCE_PATH = Path(__file__).resolve().parents[2] / "code-skill" / "references" / "prompt-generation.md"
 GLOBAL_ENTRY_RULE_PATH = Path(__file__).resolve().parents[2] / "task-analyze-skill" / "assets" / "global-claude-entry-rule.md"
 
 
@@ -10,6 +11,7 @@ class PromptContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.prompt_skill = PROMPT_SKILL_PATH.read_text(encoding="utf-8")
+        cls.code_reference = CODE_PROMPT_REFERENCE_PATH.read_text(encoding="utf-8")
         cls.global_entry_rule = GLOBAL_ENTRY_RULE_PATH.read_text(encoding="utf-8")
 
     def test_global_prompt_gate_is_mandatory_and_owned_by_the_selected_producer(self):
@@ -47,13 +49,18 @@ class PromptContractTests(unittest.TestCase):
         for required_rule in ["Ask only when missing information would materially change", "Do not expose private chain-of-thought", "Do not make every task follow a visible step-by-step", "examples as illustrations", "Prefer explicit and measurable instructions"]:
             self.assertIn(required_rule, self.prompt_skill)
 
+    def test_code_reference_inherits_global_contract(self):
+        for required_rule in ["Always apply the global `prompt-skill` first", "prompt-task routing failure", "never weakens", "Do not print this planning scaffold", "smallest applicable canonical structure", "escape literal JSON braces"]:
+            self.assertIn(required_rule, self.code_reference)
+
     def test_code_executor_scope_does_not_claim_unowned_languages(self):
         self.assertNotIn("JavaScript", self.prompt_skill)
         self.assertIn("code-skill owns Python and C#", self.prompt_skill)
 
-    def test_ending_lifecycle_uses_background_agent(self):
-        self.assertIn("background Agent task", self.prompt_skill)
-        self.assertIn("run_in_background: true", self.prompt_skill)
+    def test_ending_lifecycle_uses_awaited_agent(self):
+        self.assertIn("awaited Agent tasks", self.prompt_skill)
+        self.assertIn("run_in_background: false", self.prompt_skill)
+        self.assertIn("before reporting the prompt work done", self.prompt_skill)
 
 if __name__ == "__main__":
     unittest.main()

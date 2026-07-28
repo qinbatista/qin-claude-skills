@@ -19,10 +19,14 @@ show_all_auth_status = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(show_all_auth_status)
 
 
+# Fixture tokens stay short on purpose: the public-mirror scanner in
+# sync_global_skills.py rejects any `sk-` value with 20+ trailing token characters, so a
+# longer fake would block every push. Keep the `sk-ant-oat01` prefix -- the masking
+# assertions below check for it directly.
 FAKE_CREDENTIAL_PAYLOAD = {
     "claudeAiOauth": {
-        "accessToken": "sk-ant-oat01-not-a-real-secret",
-        "refreshToken": "sk-ant-ort01-not-a-real-secret",
+        "accessToken": "sk-ant-oat01-not-real",
+        "refreshToken": "sk-ant-ort01-not-real",
         "expiresAt": 4102444800000,
         "scopes": ["user:inference"],
         "subscriptionType": "max",
