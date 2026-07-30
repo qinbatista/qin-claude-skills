@@ -4,26 +4,24 @@
 
 - Current known vault: `/Users/qin/Library/Mobile Documents/iCloud~md~obsidian/Documents/MyAILLM`
 - The discovery chain in SKILL.md section 1 is the contract: `~/.claude/CLAUDE.md` → project `AGENTS.md` → ask the user; persist any newly discovered location back to `~/.claude/CLAUDE.md` (`Obsidian LLM Wiki` section).
-- Health check after connecting: the vault root must contain `AGENTS.md` and `LLM Wiki Home.md`, with folders `Journal/`, `Knowledge/`, `Projects/`, `Skills/`, `_System/`, `raw/`. If the structure looks different, re-read the vault `AGENTS.md` — the vault schema may have migrated; never assume the layout below.
 
-## Vault schema (operational summary)
+## Read first, follow, never restructure
 
-The vault's `AGENTS.md` is the only schema authority. If this summary and the vault `AGENTS.md` ever disagree, the vault wins — and this file must be updated.
+The vault is the user's; this skill is a guest in it.
 
-Read (before/while working):
-1. `LLM Wiki Home.md` → the relevant category or project `index.md`.
-2. For project work: `Knowledge/Project Learning.md`, the project's `Knowledge.md`, and the exact functional module named by the task.
-3. Before changing a module, run a bounded search in that project's `History.md` for the module, touched paths, symptom, and earlier bug/fix terms. Read only matching event blocks — never the whole History/log in ordinary recall.
+1. **Read the vault's rules before touching anything**: its `AGENTS.md` (or equivalent schema page) and, before using any folder, that folder's own `instruction.md`/`index.md` if one exists. Those files decide where records live, what a record looks like, and what is forbidden.
+2. **Write only where the vault's rules say**, in the format they say. When unsure which page owns a fact, read the relevant index pages to find the owner instead of guessing or creating a new home.
+3. **Never change the vault's structure**: no new top-level folders, no renamed/moved/reorganized pages, no parallel hierarchies, no schema "improvements". If the vault's rules and this file disagree, the vault wins and this file must be updated.
+4. **Empty vault only**: if the vault has no rule files and no content at all, this skill may initialize a minimal structure — and must document that structure in the vault's own rule file (`AGENTS.md`) as it does so. A non-empty vault is always read-and-follow, then write.
+5. If reading is possible but a rule is ambiguous, prefer reading more (indexes, examples of past records) over inventing; ask the user only when the vault gives no answer.
 
-Write (at closeout of meaningful work):
-1. Integrate the durable result into ONE owning Wiki page (`Projects/`, `Knowledge/`, or `Skills/`).
-2. Append one canonical event to the owner's `History.md` with a stable block ID: `^change-<utc-timestamp>-<slug>` (e.g. `^change-20260730t224200z-claude-skills-repo-wipe`). The event records: functional module, touched files, change kind, reason/root cause, observable result, verification, remaining risk.
-3. Add compact pointers only (date · link · short label · verdict) to the owner's `Activity Index.md`, `Journal/log.md`, and `Journal/<today>.md`. Never copy the event body into a pointer.
-4. Never create pages or hierarchy nodes per date, task, commit, hash, receipt, file, module, method, or symbol.
-5. After project-memory or index changes, run `python3 <vault>/_System/project_memory_lint.py`.
-6. Never store passwords, tokens, API keys, private keys, cookies, auth files, raw transcripts, private logs, or sensitive raw snippets in the vault. Sanitized lessons only.
+## Snapshot of the current vault schema (orientation only — re-read the vault each session; last verified 2026-07-30)
 
-Historical-bug closeout: classify every relevant historical issue as ACTIVE / MONITORING / RESOLVED / ARCHIVED. RESOLVED requires observable verification on the current path; a task is not complete while a relevant historical issue is unreviewed.
+Read path for project work: `LLM Wiki Home.md` → the relevant category or project `index.md` → `Knowledge/Project Learning.md`, the project's `Knowledge.md`, then a bounded search in that project's `History.md` for the module, touched paths, symptom, and earlier bug/fix terms — read only matching event blocks, never a whole log.
+
+Write path at closeout of meaningful work: integrate the durable result into ONE owning Wiki page (`Projects/`, `Knowledge/`, or `Skills/`); append one canonical event to the owner's `History.md` with a stable block ID `^change-<utc-timestamp>-<slug>`; add compact pointers only (date · link · short label · verdict) to the owner's `Activity Index.md`, `Journal/log.md`, and `Journal/<today>.md`. Never create pages per date, task, commit, hash, receipt, file, module, method, or symbol. After project-memory or index changes, run `python3 <vault>/_System/project_memory_lint.py`.
+
+Never store passwords, tokens, API keys, private keys, cookies, auth files, raw transcripts, private logs, or sensitive raw snippets in the vault. Sanitized lessons only.
 
 ## Local memory mirror — `<project>/Memory/`
 
@@ -37,5 +35,5 @@ Purpose: the same lessons available instantly and offline, so the same problem i
 
 ## Global `~/.claude/CLAUDE.md` rules
 
-- Global-only content: the Obsidian vault location, the task-lifecycle mandate, and the no-secrets rule. Nothing project-specific — project rules live in each project's `AGENTS.md` and the vault's `Projects/` pages.
+- Global-only content: the Obsidian vault location, the task-lifecycle mandate, and the no-secrets rule. Nothing project-specific — project rules live in each project's `AGENTS.md` and the vault's project pages.
 - When the vault location is discovered from a project `AGENTS.md` or from the user, append/update the `Obsidian LLM Wiki` section in `~/.claude/CLAUDE.md` with the path.

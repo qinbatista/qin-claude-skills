@@ -18,29 +18,34 @@ Resolve the vault location, in this order:
 
 When the location came from anywhere other than `~/.claude/CLAUDE.md`, write it back into `~/.claude/CLAUDE.md` (`Obsidian LLM Wiki` section) so the next session connects directly. `~/.claude/CLAUDE.md` holds ONLY global information — vault location and global rules. Never write project-specific content there; project rules live in that project's `AGENTS.md`.
 
-The vault's own `AGENTS.md` is the only schema authority for reading and writing the vault — details in `references/obsidian-memory.md`. If the vault is unreachable on this machine, say so once, continue without blocking, and fall back to project-local memory only.
+Then READ before anything else — the vault belongs to the user, not to this skill:
+
+- First read the vault's own rule files (its `AGENTS.md` or equivalent schema/instruction pages) and follow THEM for where and how to read and write records. Details: `references/obsidian-memory.md`.
+- Never change the vault's structure: no new folders, no renamed or moved pages, no reorganizing. Records go into exactly the locations the vault's own rules name.
+- Only if the vault is genuinely empty (no rule files, no content) may this skill initialize a minimal structure — and it must document that structure in the vault's own rule file while doing so. A non-empty vault is always read-and-follow, then write.
+- If the vault is unreachable on this machine, say so once, continue without blocking, and fall back to project-local memory only.
 
 ## 2. Plan
 
 - Decompose the task into concrete steps.
 - Check memory first: the project-local mirror `<project>/Memory/` plus a bounded vault search (owner `History.md`, per the vault schema) for past bugs and lessons touching the same modules. Known past issues become regression checks in this task's verification plan.
 - Score difficulty:
-  - **simple（简单）** — one small change or question; blast radius one file/method; a failure would be obvious.
-  - **standard（标准）** — multi-file change, new feature, or bug fix with a real code path to exercise.
-  - **complex（复杂）** — refactors, cross-module features, visual/rendered output, migrations, anything where a wrong result can look right.
+  - **simple** — one small change or question; blast radius one file/method; a failure would be obvious.
+  - **standard** — multi-file change, new feature, or bug fix with a real code path to exercise.
+  - **complex** — refactors, cross-module features, visual/rendered output, migrations, anything where a wrong result can look right.
 - Pick the verification plan for that difficulty (section 5) BEFORE starting work.
 
 ## 3. Announce
 
-Only after the plan is fixed, print a short brief (in the user's language, ≤8 lines), then start executing:
+Only after the plan is fixed, print a short brief (≤8 lines), then start executing:
 
 ```
-【任务启动】难度: <简单|标准|复杂> · 模型: <current model, + models of dispatched agents if any> · Skills: task-lifecycle<, +others>
-步骤: 1) … 2) … 3) …        ← short, one line each
-验证: <planned verification, one line>
+[Task Start] Difficulty: <simple|standard|complex> · Model: <current model, + models of dispatched agents if any> · Skills: task-lifecycle<, +others>
+Steps: 1) … 2) … 3) …        ← short, one line each
+Verification: <planned verification, one line>
 ```
 
-All four elements — 难度, 模型, 步骤, Skills — are mandatory in every announce, including simple tasks (a simple task may shorten 步骤 to one line, never drop an element). Only trivial pure-answer turns compress to a single line that still names 难度 · 模型 · skill.
+Write the announce in the user's language, translating the labels accordingly. All four elements — difficulty, model, steps, skills — are mandatory in every announce, including simple tasks (a simple task may shorten the steps to one line, never drop an element). Only trivial pure-answer turns compress to a single line that still names difficulty · model · skill.
 
 ## 4. Execute
 

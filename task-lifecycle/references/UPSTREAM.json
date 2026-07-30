@@ -1,8 +1,19 @@
 {
   "repo": "https://github.com/qinbatista/qin-codex-skills",
-  "commit": "5cd1e2962f580b80238e90a5ee463707bc71a931",
+  "commit": "808a9c0df6718e1500be37c50ebdcd74206c92db",
   "synced_at": "2026-07-30",
   "note": "references/code-style and references/prompt-style are ported from this repo's code-skill/references with Claude-platform adaptations only",
-  "files": ["code-style/coding-approach.md", "code-style/python-rules.md", "code-style/csharp-rules.md", "code-style/unity-csharp-rules.md", "code-style/parallelization.md", "code-style/spark-small-code.md", "code-style/skill-platform-compatibility.md", "prompt-style/prompt-generation.md"],
-  "synced_scripts": ["skill_platform_check.py"]
+  "files": [
+    "code-style/coding-approach.md",
+    "code-style/python-rules.md",
+    "code-style/csharp-rules.md",
+    "code-style/unity-csharp-rules.md",
+    "code-style/parallelization.md",
+    "code-style/spark-small-code.md",
+    "code-style/skill-platform-compatibility.md",
+    "prompt-style/prompt-generation.md"
+  ],
+  "synced_scripts": [
+    "skill_platform_check.py"
+  ]
 }
