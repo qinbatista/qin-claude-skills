@@ -1,7 +1,0 @@
-# Catalog-Derived Haiku Priority Producer
-
-Every submission receives a deterministic `0-100` score: `0-24` small, `25-49` standard, `50-74` complex, and `75-100` advanced. A low-risk, low-ambiguity text/code edit in the small band tries the catalog priority producer first. Today that role resolves to `haiku|low`; replacement or removal does not break the quality ladder. `haiku` also remains valid for explicitly admitted disjoint read-only source branches.
-
-`haiku` stays outside ordinary schema-version-2 quality nodes. A zero-result, zero-token operational failure falls back to the contextual quality pair. An Ending correctness/quality failure records an upgrade, suppresses `haiku` for the matching project/task/operation/code-kind/score-band context, and makes the next matching task use the contextual quality pair. Other quality pairs retain the two Real PASS downgrade and one quality FAIL upgrade rules.
-
-A model label or cached capability is not execution proof. Require one route receipt containing every attempt, score/band, switch direction, and sanitized `model_learning_context`. Start Ending with `--producer-receipt`; every lifecycle stores score/band locally and the receipt-backed terminal event records the outcome and next pair in Obsidian. Old local `model_experience.json` remains legacy read-only. Present the completed result first; Ending Real runs independently and a different Ending verifier confirms any repair.
