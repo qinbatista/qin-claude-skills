@@ -1,6 +1,6 @@
 ---
 name: task-lifecycle
-description: Qin's mandatory task lifecycle — launch at the start of EVERY task (coding, debugging, refactoring, testing, writing, automation, research) in any project. Connects the Obsidian vault, plans and scores difficulty, announces difficulty/model/steps, enforces Qin's code and prompt style rules, runs difficulty-scaled REAL verification in a fix loop until PASS, then applies code/process optimization and records memory to Obsidian plus a project-local mirror.
+description: Qin's mandatory task lifecycle — launch at the start of EVERY task (coding, debugging, refactoring, testing, writing, automation, research) in any project. Connects the Obsidian vault, plans and scores difficulty, announces difficulty (band + 0–100 score)/model/steps in a standalone message, enforces Qin's code and prompt style rules, runs difficulty-scaled REAL verification in a fix loop until PASS, then applies code/process optimization and records memory to Obsidian plus a project-local mirror.
 ---
 
 # Task Lifecycle (Qin)
@@ -29,7 +29,7 @@ Then READ before anything else — the vault belongs to the user, not to this sk
 
 - Decompose the task into concrete steps.
 - Check memory first: the project-local mirror `<project>/Memory/` plus a bounded vault search (owner `History.md`, per the vault schema) for past bugs and lessons touching the same modules. Known past issues become regression checks in this task's verification plan.
-- Score difficulty:
+- Score difficulty — pick the band, plus a 0–100 reference score for the announce (0 trivial … 100 hardest; display-only, it never routes anything):
   - **simple** — one small change or question; blast radius one file/method; a failure would be obvious.
   - **standard** — multi-file change, new feature, or bug fix with a real code path to exercise.
   - **complex** — refactors, cross-module features, visual/rendered output, migrations, anything where a wrong result can look right.
@@ -37,15 +37,17 @@ Then READ before anything else — the vault belongs to the user, not to this sk
 
 ## 3. Announce
 
-Only after the plan is fixed, print a short brief (≤8 lines), then start executing:
+Only after the plan is fixed, send the brief (≤8 lines) as its OWN message: the announce is the entire message — nothing before it, no tool calls attached, execution starts in the next message. Never sandwich it between tool outputs (2026-07-31: a sandwiched announce scrolled past unseen and read as "the skill never ran"):
 
 ```
-[Task Start] Difficulty: <simple|standard|complex> · Model: <current model, + models of dispatched agents if any> · Skills: task-lifecycle<, +others>
+[Task Start] Difficulty: <simple|standard|complex> (<score>/100) · Model: <current model, + models of dispatched agents if any> · Skills: task-lifecycle<, +others>
 Steps: 1) … 2) … 3) …        ← short, one line each
 Verification: <planned verification, one line>
 ```
 
-Write the announce in the user's language, translating the labels accordingly. All four elements — difficulty, model, steps, skills — are mandatory in every announce, including simple tasks (a simple task may shorten the steps to one line, never drop an element). Only trivial pure-answer turns compress to a single line that still names difficulty · model · skill.
+`<score>/100` is a display-only reference beside the band. The three bands remain the only thing that scales verification (section 5); the score never picks a model and never routes — the retired spark-small-code ladder stays retired.
+
+Write the announce in the user's language, translating the labels accordingly. All five elements — difficulty band, score, model, steps, skills — are mandatory in every announce, including simple tasks (a simple task may shorten the steps to one line, never drop an element). Only trivial pure-answer turns compress to a single line that still names difficulty · score · model · skill.
 
 ## 4. Execute
 
@@ -69,7 +71,7 @@ Verification must actually EXECUTE. Reasoning alone never counts as verification
 - FAIL → fix → re-verify. The loop may revise the plan; it ends only at PASS.
 - After ~3 failed cycles: change the approach entirely, and re-examine whether the requirement is actually achievable. If it is genuinely impossible, tell the user why, with the evidence. If it is theoretically possible, keep going until solved — never quietly downgrade the goal.
 - Never report "done / complete / ready" while any planned check is unrun or failing.
-- **End-Task vocabulary bridge** — the synced style files keep upstream Ending vocabulary; map it to this section: `CODE READY` = a progress presentation, never a completion claim; "scored/modelled End Task", `ENDING_TASK_WORKER`, "detached background Agent", and "Ending Real verification" = this section's independent verifier, run to completion inside the current task — never detached, never returning before every check PASSes ("return without polling/waiting" does not apply); "three attempts then BLOCKED" = the ~3-fail change-of-approach rule above; the 0-100 scoring and model-ladder routing in `spark-small-code.md` are superseded by section 2's three difficulty bands (that file is kept only for upstream sync fidelity).
+- **End-Task vocabulary bridge** — the synced style files keep upstream Ending vocabulary; map it to this section: `CODE READY` = a progress presentation, never a completion claim; "scored/modelled End Task", `ENDING_TASK_WORKER`, "detached background Agent", and "Ending Real verification" = this section's independent verifier, run to completion inside the current task — never detached, never returning before every check PASSes ("return without polling/waiting" does not apply); "three attempts then BLOCKED" = the ~3-fail change-of-approach rule above; the 0-100 scoring and model-ladder routing in `spark-small-code.md` are superseded by section 2's three difficulty bands (that file is kept only for upstream sync fidelity; the announce's `<score>/100` is a display-only echo, not that ladder's routing).
 
 ## 6. Cache discipline
 
