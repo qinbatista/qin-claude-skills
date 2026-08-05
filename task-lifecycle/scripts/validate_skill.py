@@ -35,6 +35,7 @@ for synced_script in stamp.get("synced_scripts", []):
     require((skill_root / "scripts" / synced_script).is_file(), f"UPSTREAM.json lists missing script: {synced_script}")
 
 require((skill_root / "scripts" / "sync_check.py").is_file(), "scripts/sync_check.py missing")
+require((skill_root / "scripts" / "deploy_local.py").is_file(), "scripts/deploy_local.py missing")
 require((skill_root / "references" / "obsidian-memory.md").is_file(), "references/obsidian-memory.md missing")
 
 if problems:

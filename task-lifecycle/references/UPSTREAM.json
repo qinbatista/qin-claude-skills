@@ -1,7 +1,7 @@
 {
   "repo": "https://github.com/qinbatista/qin-codex-skills",
-  "commit": "808a9c0df6718e1500be37c50ebdcd74206c92db",
-  "synced_at": "2026-07-30",
+  "commit": "1677883618e367b2216589eade2b3239cb19739f",
+  "synced_at": "2026-08-05",
   "note": "references/code-style and references/prompt-style are ported from this repo's code-skill/references with Claude-platform adaptations only",
   "files": [
     "code-style/coding-approach.md",

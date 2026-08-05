@@ -4,19 +4,19 @@
 
 [中文说明](./README.zh.md)
 
-A single mandatory skill, `task-lifecycle`, replaces the previous 9-skill "Auto Best Model" set (still recoverable in git history before this commit). Style rules stay synced with the Codex-only sibling [`qin-codex-skills`](https://github.com/qinbatista/qin-codex-skills).
+A single mandatory skill, `task-lifecycle`, replaces the previous 9-skill "Auto Best Model" set (still recoverable in git history before this commit). Style rules stay synced with the Codex-only sibling [`qin-codex-skills`](https://github.com/qinbatista/qin-codex-skills); lifecycle ideas are ported from it in Claude-native form (see [PORTING.md](./PORTING.md)) — no model ladder, no detached verifier threads.
 
 ## The lifecycle
 
 Every task, start to finish:
 
-1. **Connect Obsidian** — vault location from `~/.claude/CLAUDE.md` → project `AGENTS.md` → ask; newly discovered locations are persisted to `~/.claude/CLAUDE.md` (global-only info lives there, never project info).
-2. **Plan** — decompose into steps, check project + vault memory for past lessons, score difficulty: simple / standard / complex.
-3. **Announce** — after the plan is fixed, print one short brief: difficulty · model · steps · skills · planned verification.
-4. **Execute** — parallel dispatch for independent subtasks; **any code** first reads `references/code-style/` (coding approach + Python/C#/Unity rules); **any prompt** follows `references/prompt-style/prompt-generation.md`; intermediates go to `<project>/Cache/<Category>/`, never scattered.
-5. **Verify** — real execution scaled to difficulty: simple = quick functional check; standard = real code path + independent verifier agent; complex = run the real pipeline, personally view and compare visual outputs. FAIL → fix → re-verify, loop until PASS; after ~3 failed cycles change approach or honestly report infeasibility.
-6. **Optimize** — code (same behavior, less code, drop unnecessary defensive layers) and process (repeated chores become runnable scripts under `Cache/Tools/`).
-7. **Record** — canonical event in the Obsidian vault (owner `History.md` + `^change-*` block ID) plus a project-local mirror in `<project>/Memory/`, so the same problem is never solved twice.
+1. **Connect Obsidian** — vault location from `~/.claude/CLAUDE.md` → project `AGENTS.md` → ask; read the vault's own rules first, never restructure it.
+2. **Plan** — decompose into steps, check project + vault memory for past lessons, score difficulty: simple / standard / complex (+ a display-only 0–100 score). A repeated same-session correction re-enters planning: re-score, change approach — never re-run the same strategy harder.
+3. **Announce** — after the plan is fixed, one standalone brief: difficulty · score · model · steps · skills · planned verification. Material mid-task plan changes get their own one-line notice.
+4. **Execute, result first** — parallel dispatch for independent subtasks; **any code** first reads `references/code-style/` (coding approach + Python/C#/Unity rules); **any prompt** follows `references/prompt-style/prompt-generation.md`; every code change gets a bounded producer **Quick Check** before it is presented; intermediates go to `<project>/Cache/<Category>/<task>/`, never scattered.
+5. **Verify** — present the result (`MAIN RESULT READY`), then run real verification scaled to difficulty: read-only answers need no separate verifier; simple = one real run; standard = real code path + independent verifier agent; complex = run the real pipeline and personally view visual outputs. FAIL → record exact evidence → fix → FRESH re-verification (the verifier never edits its target); after ~3 failed cycles change approach or honestly report `BLOCKED`. Status vocabulary: `MAIN RESULT READY` / `PASS` / `FAIL` / `BLOCKED`.
+6. **Optimize** — code (same behavior, less code) and process (repeated chores become runnable scripts under `Cache/Tools/`).
+7. **Record** — one canonical event in the Obsidian vault written per the vault's own schema, plus a project-local mirror in `<project>/Memory/`. A complete record answers what / why / result / verification / decisions / risks / files; past bugs on the same modules are classified (`ACTIVE`/`MONITORING`/`RESOLVED`/`ARCHIVED`) before claiming done. The same problem is never solved twice.
 
 ## Layout
 
@@ -24,22 +24,29 @@ Every task, start to finish:
 task-lifecycle/
   SKILL.md                     the lifecycle contract
   references/
-    obsidian-memory.md         vault connection, schema summary, local memory mirror
+    obsidian-memory.md         vault connection, schema snapshot, local memory mirror
     code-style/                synced from qin-codex-skills (Claude adaptations only)
     prompt-style/              synced from qin-codex-skills (Claude adaptations only)
     UPSTREAM.json              sync stamp (repo + commit + file list)
+  assets/
+    global-claude-entry-rule.md  template for the two global ~/.claude/CLAUDE.md sections
+    skill-platform-baseline.json platform-gate baseline
   scripts/
     sync_check.py              fast upstream drift check (`--update` restamps)
     validate_skill.py          structure self-check
+    deploy_local.py            source-first deploy to ~/.claude/skills (`--check` previews)
+    skill_platform_check.py    platform-compatibility gate for skill runtime scripts
 ```
 
-## Install
+## Install / deploy
+
+This repo is the source of truth; `~/.claude/skills/task-lifecycle/` is a deployed mirror. Never edit the mirror directly:
 
 ```bash
-rsync -a --delete task-lifecycle/ ~/.claude/skills/task-lifecycle/
+python3 task-lifecycle/scripts/deploy_local.py
 ```
 
-Then make sure `~/.claude/CLAUDE.md` contains the two global sections: `Obsidian LLM Wiki` (vault location) and `Task Lifecycle` (mandate: every task starts this skill).
+It validates the skill structure first, then mirrors changed files and removes stale ones (`--check` previews without writing). Then make sure `~/.claude/CLAUDE.md` contains the two global sections: `Obsidian LLM Wiki` (vault location) and `Task Lifecycle` (mandate: every task starts this skill).
 
 ## Style sync with qin-codex-skills
 
