@@ -13,6 +13,8 @@
 
 ## Regression checks
 
+- `python3 task-lifecycle/scripts/self_check.py` → SELF-CHECK: PASS (one-command health check; auto-repairs a stale/hand-edited/missing mirror from source; `--check-only` provably writes nothing; a repo that fails validation never deploys — verified 2026-08-05 with md5 snapshots and a broken-copy test).
+
 - `python3 task-lifecycle/scripts/validate_skill.py` → PASS (checks 9 section headings, frontmatter, referenced files, UPSTREAM.json, deploy_local.py presence).
 - `python3 task-lifecycle/scripts/sync_check.py` → SAME against upstream HEAD.
 - `python3 task-lifecycle/scripts/skill_platform_check.py check --skills-root . --baseline task-lifecycle/assets/skill-platform-baseline.json` → no new findings.

@@ -35,6 +35,7 @@ task-lifecycle/
     sync_check.py              上游漂移快检（`--update` 重打标记）
     validate_skill.py          结构自检
     deploy_local.py            source-first 部署到 ~/.claude/skills（`--check` 预览）
+    self_check.py              一条命令体检；镜像损坏自动重装
     skill_platform_check.py    Skill 运行时脚本的跨平台门禁
 ```
 
@@ -47,6 +48,14 @@ python3 task-lifecycle/scripts/deploy_local.py
 ```
 
 脚本先做结构校验，再镜像变更文件并清理失效文件（`--check` 只预览不写入）。然后确认 `~/.claude/CLAUDE.md` 含有两个全局段落：`Obsidian LLM Wiki`（金库位置）和 `Task Lifecycle`（强制：每个任务启动本 Skill）。
+
+## 自检
+
+一条命令验证全部——结构、平台门禁、风格同步戳、部署镜像——镜像落后或被手改会自动从仓库重装（`--check-only` 只报告不修复；仓库本身损坏只报错、绝不自动"治疗"）：
+
+```bash
+python3 task-lifecycle/scripts/self_check.py
+```
 
 ## 与 qin-codex-skills 的风格同步
 

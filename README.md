@@ -35,6 +35,7 @@ task-lifecycle/
     sync_check.py              fast upstream drift check (`--update` restamps)
     validate_skill.py          structure self-check
     deploy_local.py            source-first deploy to ~/.claude/skills (`--check` previews)
+    self_check.py              one-command health check; auto-repairs a broken mirror
     skill_platform_check.py    platform-compatibility gate for skill runtime scripts
 ```
 
@@ -47,6 +48,14 @@ python3 task-lifecycle/scripts/deploy_local.py
 ```
 
 It validates the skill structure first, then mirrors changed files and removes stale ones (`--check` previews without writing). Then make sure `~/.claude/CLAUDE.md` contains the two global sections: `Obsidian LLM Wiki` (vault location) and `Task Lifecycle` (mandate: every task starts this skill).
+
+## Self-check
+
+One command validates everything — structure, platform gate, style-sync stamp, deployed mirror — and automatically redeploys a stale or hand-edited mirror from source (`--check-only` reports without repairing; a broken repo is reported, never auto-"healed"):
+
+```bash
+python3 task-lifecycle/scripts/self_check.py
+```
 
 ## Style sync with qin-codex-skills
 
