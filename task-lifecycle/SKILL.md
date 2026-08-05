@@ -82,6 +82,7 @@ Choose the smallest realistic evidence that proves the user's OBSERVABLE RESULT,
 
 Loop rules:
 
+- **The loop is automatic**: a FAIL never ends the task, never waits for the user, and never downgrades to a warning — the fix and its fresh re-verification happen immediately in the same task, and the loop exits only at PASS, at an honest BLOCKED, or through the ~3-cycle approach change below.
 - FAIL → record the exact command, output, and error → fix → a FRESH verification reruns the original acceptance check. The verifier never edits its own target; at standard/complex the fixer never verifies its own fix.
 - After ~3 failed cycles: change the approach entirely, and re-examine whether the requirement is actually achievable. If it is genuinely impossible, tell the user why, with the evidence. If it is theoretically possible, keep going until solved — never quietly downgrade the goal.
 - **Status vocabulary** — the only completion words: `MAIN RESULT READY` (delivered, verification pending) · `PASS` (every planned check ran and passed) · `FAIL` (a check found a defect; fixing) · `BLOCKED` (external/unavailable condition or exhausted approaches, reported honestly). Never report "done / complete / ready" while any planned check is unrun or failing; FAIL or BLOCKED is never presented as done.
