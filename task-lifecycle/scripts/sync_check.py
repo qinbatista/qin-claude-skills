@@ -6,7 +6,14 @@ from pathlib import Path
 
 skill_root = Path(__file__).resolve().parent.parent
 stamp_path = skill_root / "references" / "UPSTREAM.json"
-stamp = json.loads(stamp_path.read_text())
+try:
+    stamp = json.loads(stamp_path.read_text(encoding="utf-8", errors="replace"))
+except (OSError, ValueError) as error:
+    print(f"SKIPPED: references/UPSTREAM.json is unreadable ({error}); cannot compare against upstream")
+    sys.exit(0)
+if not stamp.get("repo") or not stamp.get("commit"):
+    print("SKIPPED: references/UPSTREAM.json has no repo/commit stamp; cannot compare against upstream")
+    sys.exit(0)
 
 
 def remote_head(repo_url):

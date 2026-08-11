@@ -1,13 +1,15 @@
 {
   "repo": "https://github.com/qinbatista/qin-codex-skills",
-  "commit": "1677883618e367b2216589eade2b3239cb19739f",
-  "synced_at": "2026-08-05",
+  "commit": "1122c77cba44660a7646a69aca8e68a46393be59",
+  "synced_at": "2026-08-11",
   "note": "references/code-style and references/prompt-style are ported from this repo's code-skill/references with Claude-platform adaptations only",
   "files": [
+    "code-style/code-writing-philosophy.md",
     "code-style/coding-approach.md",
     "code-style/python-rules.md",
     "code-style/csharp-rules.md",
     "code-style/unity-csharp-rules.md",
+    "code-style/unity-game-code-structure-design.md",
     "code-style/parallelization.md",
     "code-style/spark-small-code.md",
     "code-style/skill-platform-compatibility.md",

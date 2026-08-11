@@ -1,0 +1,1360 @@
+{
+  "schema_version": 1,
+  "upstream_repo": "https://github.com/qinbatista/qin-codex-skills",
+  "note": "Scored proof that the Claude single-skill lifecycle carries the qin-codex-skills lifecycle ideas. Every entry names the phrase that proves the idea exists UPSTREAM and the phrase that proves its Claude-native form exists HERE, so the benchmark cannot drift into fiction: a wrong upstream anchor scores STALE, not PASS. Three statuses: 'ported' (the idea must be present here), 'inverted' (this repo deliberately does the opposite and must say so explicitly), and 'retired' (the idea must be provably ABSENT from the active Claude contract files).",
+  "ideas": [
+    {
+      "id": 1,
+      "idea": "Vault memory is read-first and its structure is never changed by the agent",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "never create legacy History, Activity, Journal, or Archive layers"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Never change the vault's structure"
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "idea": "One bounded memory recall before the first durable edit, never repository archaeology",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "Before Editing: Bounded Recall",
+          "Do not broaden this recall into repository archaeology"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "one bounded vault lookup"
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "idea": "Every submission is scored 0-100 and the score is disclosed",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "task-analyze-skill/assets/global-agents-entry-rule.md",
+        "patterns": [
+          "Score every submission 0-100"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "0–100 reference score"
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "idea": "A repeated same-topic correction changes the solving approach instead of retrying harder",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "A repeated corrective submission with the same topic"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Correction escalation",
+          "never re-run the same strategy harder"
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "idea": "A topic jump resets the escalation state",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "a topic jump in the same session starts a separate effort state"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "A new topic resets this signal"
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "idea": "The user is told the route/plan before execution, and a change of course is announced",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "task-analyze-skill/assets/global-agents-entry-rule.md",
+        "patterns": [
+          "notify user early"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Mid-task change notice",
+          "Never change course silently"
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "idea": "A universal before/during-writing process gate governs every code change in any language",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/references/code-writing-philosophy.md",
+        "patterns": [
+          "mandatory before/during-writing process authority"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/references/code-style/code-writing-philosophy.md",
+        "patterns": [
+          "mandatory before/during-writing process authority"
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "idea": "An explicit AGENTS.md continuity decision is part of writing code",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/references/code-writing-philosophy.md",
+        "patterns": [
+          "`AGENTS.md` continuity decision"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/references/code-style/code-writing-philosophy.md",
+        "patterns": [
+          "`AGENTS.md` continuity decision"
+        ]
+      }
+    },
+    {
+      "id": 9,
+      "idea": "Reuse the existing owner and write the smallest coherent change instead of layering adapters",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/references/code-writing-philosophy.md",
+        "patterns": [
+          "smallest coherent change",
+          "adapters, wrappers, fallback nests"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/references/code-style/code-writing-philosophy.md",
+        "patterns": [
+          "smallest coherent change",
+          "adapters, wrappers, fallback nests"
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "idea": "A proportional lifecycle performance pass runs before the Quick Check",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/references/code-writing-philosophy.md",
+        "patterns": [
+          "proportional lifecycle performance pass"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/references/code-style/code-writing-philosophy.md",
+        "patterns": [
+          "proportional lifecycle performance pass"
+        ]
+      }
+    },
+    {
+      "id": 11,
+      "idea": "Six-rule Mandatory Basic UI Change Gate is blocking for every UI change",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/references/coding-approach.md",
+        "patterns": [
+          "Mandatory Basic UI Change Gate"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/references/code-style/coding-approach.md",
+        "patterns": [
+          "Mandatory Basic UI Change Gate"
+        ]
+      }
+    },
+    {
+      "id": 12,
+      "idea": "User Experience Philosophy: acknowledge first then show the truthful final state, and prefer visual over dense text",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/references/coding-approach.md",
+        "patterns": [
+          "Respond first, continue safely",
+          "Make information visual first"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/references/code-style/coding-approach.md",
+        "patterns": [
+          "Respond first, continue safely",
+          "Make information visual first"
+        ]
+      }
+    },
+    {
+      "id": 13,
+      "idea": "Unity gameplay runtime has exactly two behavior roles: XXController and XXManager",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/references/unity-game-code-structure-design.md",
+        "patterns": [
+          "The only gameplay runtime-behavior roles"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/references/code-style/unity-game-code-structure-design.md",
+        "patterns": [
+          "The only gameplay runtime-behavior roles"
+        ]
+      }
+    },
+    {
+      "id": 14,
+      "idea": "Manager tuning comes from ScriptableObject data; transient runtime state stays local",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/references/unity-game-code-structure-design.md",
+        "patterns": [
+          "Authored data versus runtime state"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/references/code-style/unity-game-code-structure-design.md",
+        "patterns": [
+          "Authored data versus runtime state"
+        ]
+      }
+    },
+    {
+      "id": 15,
+      "idea": "Design patterns are used only on a concrete trigger, never as ceremony",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/references/unity-game-code-structure-design.md",
+        "patterns": [
+          "Pattern decisions, not ceremony"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/references/code-style/unity-game-code-structure-design.md",
+        "patterns": [
+          "Pattern decisions, not ceremony"
+        ]
+      }
+    },
+    {
+      "id": 16,
+      "idea": "A bounded producer Quick Check runs before presentation and is never independent verification",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "it is not independent verification"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Quick Check \\(producer self-check\\)",
+          "never independent verification"
+        ]
+      }
+    },
+    {
+      "id": 17,
+      "idea": "Quick Check is skipped for heavy/destructive work in favour of syntax plus changed-name checks",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/references/python-rules.md",
+        "patterns": [
+          "skip the heavy run"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "mark it SKIPPED"
+        ]
+      }
+    },
+    {
+      "id": 18,
+      "idea": "Result-first boundary: the usable result is presented before verification runs",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Result-First Boundary"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "result first",
+          "present the result \\(`MAIN RESULT READY`\\)"
+        ]
+      }
+    },
+    {
+      "id": 19,
+      "idea": "Fixed status vocabulary MAIN RESULT READY / PASS / FAIL / BLOCKED",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Required Status Vocabulary",
+          "MAIN RESULT READY",
+          "BLOCKED"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Status vocabulary",
+          "MAIN RESULT READY",
+          "BLOCKED"
+        ]
+      }
+    },
+    {
+      "id": 20,
+      "idea": "A progress update is never substituted for the usable result presentation",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Never substitute a progress update"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "it is a progress presentation, never a completion claim"
+        ]
+      }
+    },
+    {
+      "id": 21,
+      "idea": "Verification is mandatory; only a low-risk single-result task records intentionally_skipped_simple_task",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "intentionally_skipped_simple_task"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Verification is required by default",
+          "intentionally_skipped_simple_task"
+        ]
+      }
+    },
+    {
+      "id": 22,
+      "idea": "Exactly one verification carries the whole check list; safe checks concurrent, shared-state ordered",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Independent safe checks may run concurrently",
+          "shared-state checks remain ordered"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "One verification pass owns the whole check list",
+          "checks sharing state stay ordered"
+        ]
+      }
+    },
+    {
+      "id": 23,
+      "idea": "Distinct checks are never collapsed into one vague assertion",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Never collapse distinct checks into one vague assertion"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "do not collapse distinct checks into a single vague assertion"
+        ]
+      }
+    },
+    {
+      "id": 24,
+      "idea": "Verification must actually execute a real check; a summary or reasoning alone cannot PASS",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "a receipt summary alone cannot PASS"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "must actually EXECUTE — reasoning alone never counts"
+        ]
+      }
+    },
+    {
+      "id": 25,
+      "idea": "The failing verifier never edits the result; repair returns to the immutable origin producer",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Do not let the failing Ending verifier alter the result",
+          "immutable origin session"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "The verifier never edits its own target",
+          "Repair belongs to the producer"
+        ]
+      }
+    },
+    {
+      "id": 26,
+      "idea": "A repair is followed by a FRESH verification that reruns the ORIGINAL acceptance check, linked to the failed parent",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "rerun the original acceptance command",
+          "repair-of-lifecycle-id"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "reruns the ORIGINAL acceptance check and stays linked to the failed parent"
+        ]
+      }
+    },
+    {
+      "id": 27,
+      "idea": "At most three repair attempts, then an honest BLOCKED instead of a fake pass",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "at most three repair attempts",
+          "BLOCKED does not count as verified"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "After ~3 failed cycles",
+          "never quietly downgrade the goal"
+        ]
+      }
+    },
+    {
+      "id": 28,
+      "idea": "Choose the smallest realistic evidence proving the observable result, not that the method ran",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Real Verify Scope",
+          "Verify the user's observable result, not only the attempted method"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "smallest realistic evidence",
+          "not merely that the method ran"
+        ]
+      }
+    },
+    {
+      "id": 29,
+      "idea": "UI and visual artifacts are actually rendered and inspected, desktop and narrow, against the six-rule gate",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Open/render the real artifact",
+          "desktop and narrow states"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "render the real artifact, view desktop and narrow states"
+        ]
+      }
+    },
+    {
+      "id": 30,
+      "idea": "Documents and reports are opened and inspected page by page, not assumed",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Parse and render the actual file"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "open the produced file itself"
+        ]
+      }
+    },
+    {
+      "id": 31,
+      "idea": "Automation, browser and deployment work is proven by the real interaction path and final observable state",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Execute the real interaction path"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "execute the real interaction path"
+        ]
+      }
+    },
+    {
+      "id": 32,
+      "idea": "All disposable/supporting artifacts live in task-scoped project Cache, never a system temp or project root",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Project Cache Artifact Policy"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Cache discipline",
+          "never dump loose files in the Cache root"
+        ]
+      }
+    },
+    {
+      "id": 33,
+      "idea": "Deletion discipline: documented Cache content is never deleted without explicit authorization",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Never delete documented important Cache content without explicit authorization"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Never delete Cache content documented in the project's `AGENTS.md` without explicit authorization"
+        ]
+      }
+    },
+    {
+      "id": 34,
+      "idea": "No machine-specific absolute path in committed files; AI-only external paths live in an untracked Cache registry",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Never hard-code a user-specific POSIX home absolute path",
+          "Cache/cache_path.json"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "never hard-code a machine-specific absolute path",
+          "Cache/cache_path.json"
+        ]
+      }
+    },
+    {
+      "id": 35,
+      "idea": "Project AGENTS.md is a compact structural contract with Cache pointers, never a task notebook",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "compact structural contract, not a project notebook"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "compact structural contract",
+          "not a notebook"
+        ]
+      }
+    },
+    {
+      "id": 36,
+      "idea": "One complete change record answers what/why/result/verification/decisions/risks/files",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "Record Contract",
+          "Reject a record that omits the reason, result, verification status, or touched files"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Record contract",
+          "what changed, why this design, observable result"
+        ]
+      }
+    },
+    {
+      "id": 37,
+      "idea": "Durable code changes are recorded with their functional module and exact method/symbol, __module__ for module-level",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "`--symbol __module__` sentinel"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "`__module__`"
+        ]
+      }
+    },
+    {
+      "id": 38,
+      "idea": "Verified results are recalled across sessions; session identity is provenance, not a retrieval barrier",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "provenance, not retrieval barriers"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "session identity is provenance, not a retrieval barrier"
+        ]
+      }
+    },
+    {
+      "id": 39,
+      "idea": "Recall returns only effective records; a correction appends with supersedes and never rewrites history",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "Recall returns only effective records",
+          "it never rewrites history"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Recall returns only effective records",
+          "Never rewrite or delete the old event"
+        ]
+      }
+    },
+    {
+      "id": 40,
+      "idea": "Process contract, execution evidence and memory are three authorities; the wrong one is named before any memory write",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "skill_contract_defect",
+          "execution_drift",
+          "insufficient_evidence"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Three authorities must agree before writing",
+          "skill_contract_defect",
+          "execution_drift",
+          "insufficient_evidence"
+        ]
+      }
+    },
+    {
+      "id": 41,
+      "idea": "A process or execution defect is never disguised as a memory correction",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "A process-contract or execution defect is disguised as a result-memory correction"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "memory is never edited to hide a process or execution defect"
+        ]
+      }
+    },
+    {
+      "id": 42,
+      "idea": "A durable record must be read back after writing; an unavailable store leaves a pending projection to retry",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "read_back_verified",
+          "projection-pending"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Read back what you wrote"
+        ]
+      }
+    },
+    {
+      "id": 43,
+      "idea": "Historical bug closeout classifies ACTIVE / MONITORING / RESOLVED / ARCHIVED with architectural evidence to archive",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "Historical Bug Closeout",
+          "Do not archive an issue merely because it did not reproduce once"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Bug closeout",
+          "one failed reproduction never archives"
+        ]
+      }
+    },
+    {
+      "id": 44,
+      "idea": "A remembered decision is evidence, not instruction: current user intent and current code win",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "A remembered decision is evidence, not a higher-priority instruction"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "A remembered decision is evidence, not instruction"
+        ]
+      }
+    },
+    {
+      "id": 45,
+      "idea": "Every submission gets a bounded preference scan; an empty scan is a strict no-op",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "strict no-op for preference memory"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Preference scan",
+          "an empty scan is a strict no-op"
+        ]
+      }
+    },
+    {
+      "id": 46,
+      "idea": "Memory never stores raw prompts, secrets, or private logs",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "never raw prompts"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Never store raw prompts, secrets, or private logs"
+        ]
+      }
+    },
+    {
+      "id": 47,
+      "idea": "Dependency-ready independent work runs in parallel; shared writes and ordering stay linear",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "task-analyze-skill/assets/global-agents-entry-rule.md",
+        "patterns": [
+          "Dependency-ready independent nodes run parallel"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "independent subtasks run as parallel subagents"
+        ]
+      }
+    },
+    {
+      "id": 48,
+      "idea": "Skill runtime code passes a cross-platform compatibility checker before publication",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "management-skill/SKILL.md",
+        "patterns": [
+          "require publish-time checker execution"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "run its platform checker"
+        ]
+      }
+    },
+    {
+      "id": 49,
+      "idea": "The maintained repository is the publication source of truth and the installed directory is only a deployment target",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "management-skill/SKILL.md",
+        "patterns": [
+          "is a deployment target, never the source for repository edits"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "is a deployed mirror",
+          "Never edit the deployed copy directly"
+        ]
+      }
+    },
+    {
+      "id": 50,
+      "idea": "A retained-capability gate must PASS before local deployment or GitHub publication, with no skip flag",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "management-skill/references/global-skill-release-gate.md",
+        "patterns": [
+          "before any local global deployment or GitHub publication",
+          "there is no user-facing skip flag"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Retained-capability release gate",
+          "there is no skip flag"
+        ]
+      }
+    },
+    {
+      "id": 51,
+      "idea": "A capability stays mandatory until the user retires it, and retired architectures are never reactivated",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "management-skill/references/global-skill-release-gate.md",
+        "patterns": [
+          "until the user explicitly replaces or retires it",
+          "must not be reactivated"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "only Qin may retire an entry",
+          "is never reactivated"
+        ]
+      }
+    },
+    {
+      "id": 52,
+      "idea": "GPT model catalog / quality ladder and adaptive model routing",
+      "status": "retired",
+      "upstream_evidence": {
+        "file": "code-skill/references/spark-small-code.md",
+        "patterns": [
+          "gpt-5\\.3-codex-spark\\|low"
+        ]
+      },
+      "claude_evidence": {
+        "files": [
+          "task-lifecycle/SKILL.md",
+          "task-lifecycle/assets/global-claude-entry-rule.md",
+          "README.md",
+          "README.zh.md"
+        ],
+        "patterns": [
+          "gpt-5",
+          "\\bterra\\b",
+          "\\bluna\\b",
+          "model ladder routing"
+        ]
+      }
+    },
+    {
+      "id": 53,
+      "idea": "Runtime receipts and model-execution disclosure blocks",
+      "status": "retired",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Do not claim runtime receipt proof without a receipt"
+        ]
+      },
+      "claude_evidence": {
+        "files": [
+          "task-lifecycle/SKILL.md",
+          "task-lifecycle/assets/global-claude-entry-rule.md",
+          "README.md",
+          "README.zh.md"
+        ],
+        "patterns": [
+          "runtime receipt",
+          "Result Model Disclosure"
+        ]
+      }
+    },
+    {
+      "id": 54,
+      "idea": "Detached Ending threads that return before verification completes — deliberately inverted: verification blocks inside the task",
+      "status": "inverted",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "The origin returns after linking the Ending and does not poll"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "never detached, never returning before every check PASSes"
+        ]
+      }
+    },
+    {
+      "id": 55,
+      "idea": "The A/B model-routing benchmark harness",
+      "status": "retired",
+      "upstream_evidence": {
+        "file": "task-analyze-skill/assets/global-agents-entry-rule.md",
+        "patterns": [
+          "AUTO_BENCHMARK_ENTRY"
+        ]
+      },
+      "claude_evidence": {
+        "files": [
+          "task-lifecycle/SKILL.md",
+          "task-lifecycle/assets/global-claude-entry-rule.md",
+          "README.md",
+          "README.zh.md"
+        ],
+        "patterns": [
+          "AUTO_BENCHMARK_ENTRY",
+          "benchmark_suite_runner"
+        ]
+      }
+    },
+    {
+      "id": 56,
+      "idea": "The project-local <project>/Memory/ mirror (a Claude-side invention, retired 2026-08-11)",
+      "status": "retired",
+      "upstream_evidence": null,
+      "claude_evidence": {
+        "files": [
+          "task-lifecycle/SKILL.md",
+          "task-lifecycle/references/obsidian-memory.md",
+          "task-lifecycle/assets/global-claude-entry-rule.md",
+          "README.md",
+          "README.zh.md"
+        ],
+        "patterns": [
+          "project-local mirror",
+          "local memory mirror",
+          "mirror in .{0,40}Memory"
+        ]
+      }
+    },
+    {
+      "id": 57,
+      "idea": "Irreversible outward actions (push, deploy, publish, external messages) require explicit authorization",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Do not push, deploy, or send external messages without authorization"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "irreversible outward action",
+          "Authorization is a safety precondition, never a substitute for doing the work"
+        ]
+      }
+    },
+    {
+      "id": 58,
+      "idea": "Verifying a skill or instruction artifact needs behavior evidence; static wording proves nothing",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "Static wording alone does not prove routing behavior"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Static wording alone never proves behavior"
+        ]
+      }
+    },
+    {
+      "id": 59,
+      "idea": "The optimizer never verifies its own work, and optimization never precedes the requested base behavior",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "optimization-skill/SKILL.md",
+        "patterns": [
+          "the optimizer never verifies its own behavior",
+          "Do not optimize before the requested base behavior exists"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "the optimizer never verifies its own optimization",
+          "Never before the base behavior exists"
+        ]
+      }
+    },
+    {
+      "id": 60,
+      "idea": "Behavior-preserving optimization: same behavior, less code, defensive scaffolding removed",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/references/python-rules.md",
+        "patterns": [
+          "behavior-preserving micro-optimization only"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "same behavior, less code"
+        ]
+      }
+    },
+    {
+      "id": 61,
+      "idea": "Every prompt passes the prompt contract before delivery; a skipped prompt gate is a routing failure, not a fallback",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/references/prompt-generation.md",
+        "patterns": [
+          "is a prompt-task routing failure"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/references/prompt-style/prompt-generation.md",
+        "patterns": [
+          "is a prompt-task routing failure"
+        ]
+      }
+    },
+    {
+      "id": 62,
+      "idea": "Preserve user authority but do not stall: make and disclose a bounded assumption instead of asking — here tightened to never asking mid-task and raising every doubt at the end",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "prompt-skill/SKILL.md",
+        "patterns": [
+          "otherwise make and disclose a bounded assumption"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "never hand the work back to Qin",
+          "Do not ask clarifying questions",
+          "belongs in the final report"
+        ]
+      }
+    },
+    {
+      "id": 63,
+      "idea": "A public-safety scan of the exact diff precedes any authorized push",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "management-skill/SKILL.md",
+        "patterns": [
+          "Run public-safety checks before any authorized push"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Public-safety scan before any authorized push"
+        ]
+      }
+    },
+    {
+      "id": 64,
+      "idea": "A failed durable change is recorded before repair starts, and the repaired record supersedes it",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "record them immediately with `verification-status=failed` before repair starts"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "A failed durable change is recorded before repair starts"
+        ]
+      }
+    },
+    {
+      "id": 65,
+      "idea": "The recorded file list is this task's files only, never inferred from the dirty worktree",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "Never infer touched files from the whole dirty worktree"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Never infer the file list from the dirty worktree"
+        ]
+      }
+    },
+    {
+      "id": 66,
+      "idea": "RESOLVED needs evidence matching the failure's own kind; a runtime or visual failure is never resolved from source reading",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "resolved from source-only evidence when its failure mode is runtime"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "never resolved from source reading alone"
+        ]
+      }
+    },
+    {
+      "id": 67,
+      "idea": "When verification IS the requested task it is the result; no fabricated pre-result verification phase",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "It does not need a fabricated pre-result verification phase"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Do not fabricate a pre-result verification phase"
+        ]
+      }
+    },
+    {
+      "id": 68,
+      "idea": "Optimization guards: not merely for shortness, and reasoning-heavy judgment never becomes brittle code",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "optimization-skill/SKILL.md",
+        "patterns": [
+          "Do not optimize merely because code or prose could be shorter"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Do not optimize merely because something could be shorter",
+          "do not move reasoning-heavy judgment into brittle code"
+        ]
+      }
+    },
+    {
+      "id": 69,
+      "idea": "Host-run project code defaults to Windows, macOS and Linux, with one explicit runtime dispatch for real differences",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "code-skill/SKILL.md",
+        "patterns": [
+          "Default host-run behavior to Windows, macOS, and Linux",
+          "instead of writing a macOS path first"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "defaults to working on Windows, macOS, and Linux",
+          "never write the macOS path first"
+        ]
+      }
+    },
+    {
+      "id": 70,
+      "idea": "No new global skill is created without the user's explicit authorization",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "optimization-skill/SKILL.md",
+        "patterns": [
+          "Do not create new global skills unless the user explicitly authorizes"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Never create a new global skill unless Qin explicitly asks"
+        ]
+      }
+    },
+    {
+      "id": 71,
+      "idea": "Performance-claim honesty: shorter text, different prompts or inputs, and summed parallel times are not savings",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "optimization-skill/SKILL.md",
+        "patterns": [
+          "Do not claim savings from shorter text, different prompts, different inputs, or summed parallel branch times"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "never claim a performance win you did not measure like-for-like"
+        ]
+      }
+    },
+    {
+      "id": 72,
+      "idea": "Confirm the live project root before editing; never a stale backup or temporary worktree",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "task-analyze-skill/references/related-memory.md",
+        "patterns": [
+          "Confirm the live project root before edits"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Confirm the live project root before editing"
+        ]
+      }
+    },
+    {
+      "id": 73,
+      "idea": "Name the real functional module; never invent a precise code module that does not exist",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "project-memory-skill/SKILL.md",
+        "patterns": [
+          "never invent a precise code module when none exists"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "rather than inventing a precise code module that does not exist"
+        ]
+      }
+    },
+    {
+      "id": 74,
+      "idea": "Never fabricate a test, and authority to act is a safety precondition rather than verification",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "verify-skill/SKILL.md",
+        "patterns": [
+          "authority is a safety precondition, not verification"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "Never fabricate a test",
+          "not\\*\\* verification"
+        ]
+      }
+    },
+    {
+      "id": 75,
+      "idea": "Reusable resources are placed by kind: judgment in the contract, long context in references, mechanics in scripts, fixtures in assets",
+      "status": "ported",
+      "upstream_evidence": {
+        "file": "optimization-skill/SKILL.md",
+        "patterns": [
+          "Move stable long context into `references/`"
+        ]
+      },
+      "claude_evidence": {
+        "file": "task-lifecycle/SKILL.md",
+        "patterns": [
+          "long context into `references/`, mechanics into `scripts/`, fixtures into `assets/`"
+        ]
+      }
+    }
+  ]
+}

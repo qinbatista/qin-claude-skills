@@ -1,0 +1,578 @@
+{
+  "schema_version": 1,
+  "note": "Numbered authority for behavior Qin has explicitly retained. A capability stays mandatory until Qin retires it; a new feature may extend this catalog but may never silently drop an entry (release_gate.py enforces a minimum count and contiguous ids). Every text check matches only text that is IN FORCE: HTML comments, <details> blocks and fenced code (including nested fences) are stripped first, and 'section' checks require an exact section heading, so a deleted rule cannot be revived by parking its wording somewhere inert. Every 'script' check must also REJECT a synthetic known-bad fixture, so an emptied or stubbed checker cannot pass. Known limit, stated rather than pretended: the 'absent' scans are literal patterns over normalized text — they catch spelling and case variants listed here, not unicode homoglyphs or arbitrary paraphrase. They defend against accidental regression, not a determined saboteur with commit access. Paths are repo-root relative.",
+  "retired_architectures": [
+    "GPT model catalog / quality ladder (Spark/Luna/Terra/Sol pairs) and adaptive model routing",
+    "runtime receipts and model-execution disclosure blocks",
+    "detached projectless End Task threads that return before verification completes",
+    "the A/B model-routing benchmark harness",
+    "the project-local <project>/Memory/ mirror",
+    "the retired 9-skill Auto Best Model skill set"
+  ],
+  "capabilities": [
+    {
+      "id": 1,
+      "capability": "Skill structure is valid: frontmatter, nine lifecycle sections, every referenced file present, sync stamp consistent",
+      "checks": [
+        {
+          "kind": "script",
+          "script": "validate_skill.py",
+          "args": [],
+          "negative_control": [
+            "--skill-root",
+            "{fixture_root}"
+          ],
+          "negative_control_fixture": {
+            "SKILL.md": "---\nname: not-task-lifecycle\ndescription: a deliberately invalid skill; the gate requires the validator to reject it with its own diagnostic\n---\n\n# Broken\n",
+            "references/UPSTREAM.json": "{\"repo\": \"https://example.invalid\", \"commit\": \"0\", \"files\": []}"
+          },
+          "negative_control_diagnostic": "must contain exactly one section headed exactly"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "capability": "Skill runtime scripts stay cross-platform (portable paths, sys.executable, guarded platform APIs)",
+      "checks": [
+        {
+          "kind": "script",
+          "script": "skill_platform_check.py",
+          "args": [
+            "check",
+            "--skills-root",
+            "{repo_root}",
+            "--baseline",
+            "{skill_root}/assets/skill-platform-baseline.json"
+          ],
+          "negative_control": [
+            "check",
+            "--skills-root",
+            "{fixture_root}",
+            "--baseline",
+            "{skill_root}/assets/skill-platform-baseline.json"
+          ],
+          "negative_control_fixture": {
+            "fixture-skill/SKILL.md": "---\nname: fixture-skill\ndescription: known-bad runtime surface for the release gate's negative control\n---\n",
+            "fixture-skill/scripts/bad_runtime.py": "import subprocess\n\n\ndef run():\n    subprocess.run([\"python3\", \"-c\", \"print(1)\"], shell=True)\n"
+          },
+          "negative_control_diagnostic": "SPG00[56]"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "capability": "Obsidian is read-first and never restructured; memory never lands in the project repo",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "1. Connect Obsidian",
+          "patterns": [
+            "Never change the vault's structure"
+          ]
+        },
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "8. Record memory",
+          "patterns": [
+            "NEVER write memory files into the project repo"
+          ]
+        },
+        {
+          "kind": "absent",
+          "files": [
+            "task-lifecycle/SKILL.md",
+            "task-lifecycle/references/obsidian-memory.md",
+            "task-lifecycle/assets/global-claude-entry-rule.md",
+            "README.md",
+            "README.zh.md"
+          ],
+          "patterns": [
+            "project-local mirror",
+            "local memory mirror",
+            "mirror in .{0,40}Memory",
+            "本地镜像",
+            "留一份镜像"
+          ]
+        },
+        {
+          "kind": "missing",
+          "path": "Memory"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "capability": "Difficulty bands plus correction escalation drive planning; the 0-100 score stays display-only",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "2. Plan",
+          "patterns": [
+            "Correction escalation",
+            "display-only",
+            "\\*\\*simple\\*\\*",
+            "\\*\\*standard\\*\\*",
+            "\\*\\*complex\\*\\*"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "capability": "The announce is a standalone message carrying difficulty, score, model, steps, and skills, with a mid-task change notice",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "3. Announce",
+          "patterns": [
+            "the announce is the entire message",
+            "Mid-task change notice"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "capability": "Code work passes the four-stage writing gate before and during writing",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "4. Execute",
+          "patterns": [
+            "code-writing-philosophy.md",
+            "BEFORE and DURING writing"
+          ]
+        },
+        {
+          "kind": "contains",
+          "file": "task-lifecycle/references/code-style/code-writing-philosophy.md",
+          "patterns": [
+            "1. Establish the current contract",
+            "2. Classify ownership and overlap",
+            "3. Write the minimum coherent change",
+            "4. Check lifecycle and continuity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "capability": "UI work applies both the six-rule UI change gate and the User Experience Philosophy",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "4. Execute",
+          "patterns": [
+            "User Experience Philosophy",
+            "Mandatory Basic UI Change Gate"
+          ]
+        },
+        {
+          "kind": "contains",
+          "file": "task-lifecycle/references/code-style/coding-approach.md",
+          "patterns": [
+            "Mandatory Basic UI Change Gate",
+            "User Experience Philosophy",
+            "Make information visual first"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "capability": "Unity game runtime code keeps the Controller/Manager/ScriptableObject core and pattern-by-trigger rule",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "4. Execute",
+          "patterns": [
+            "unity-game-code-structure-design.md"
+          ]
+        },
+        {
+          "kind": "contains",
+          "file": "task-lifecycle/references/code-style/unity-game-code-structure-design.md",
+          "patterns": [
+            "Controller/Manager/ScriptableObject core",
+            "Pattern decisions, not ceremony"
+          ]
+        },
+        {
+          "kind": "contains",
+          "file": "task-lifecycle/references/code-style/unity-csharp-rules.md",
+          "patterns": [
+            "unity-game-code-structure-design.md"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "capability": "Result-first delivery: bounded producer Quick Check, then MAIN RESULT READY before verification",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "4. Execute",
+          "patterns": [
+            "Quick Check \\(producer self-check\\)"
+          ]
+        },
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "5. Verify — result first, real, scaled, looped",
+          "patterns": [
+            "MAIN RESULT READY"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "capability": "Verification is required by default, exempt only as a stated low-risk single-result task, and one pass owns the whole check list",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "5. Verify — result first, real, scaled, looped",
+          "patterns": [
+            "Verification is required by default",
+            "intentionally_skipped_simple_task",
+            "One verification pass owns the whole check list",
+            "Static wording alone never proves behavior"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "capability": "FAIL auto-enters the fix loop; the verifier never repairs and repair belongs to the producer; status vocabulary is fixed",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "5. Verify — result first, real, scaled, looped",
+          "patterns": [
+            "The loop is automatic",
+            "Repair belongs to the producer",
+            "The verifier never edits its own target",
+            "`BLOCKED`"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "capability": "Cache discipline: task-scoped folders, deletion discipline, path portability, AI-only cache_path.json registry",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "6. Cache discipline",
+          "patterns": [
+            "Deletion discipline",
+            "Path portability",
+            "Cache/cache_path\\.json"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "capability": "Memory closeout reconciles process contract, execution evidence, and effective memory, then reads the record back",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "8. Record memory",
+          "patterns": [
+            "Three authorities must agree before writing",
+            "skill_contract_defect",
+            "execution_drift",
+            "insufficient_evidence",
+            "Read back what you wrote"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "capability": "Historical bug closeout classifies prior issues and never rewrites memory history",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "8. Record memory",
+          "patterns": [
+            "\\bACTIVE\\b",
+            "\\bMONITORING\\b",
+            "\\bRESOLVED\\b",
+            "\\bARCHIVED\\b",
+            "Never delete or rewrite memory history"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "capability": "Style rules stay provenance-tracked against qin-codex-skills and source-first deployment stays the only install path",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "Provenance & deployment",
+          "patterns": [
+            "references/UPSTREAM.json",
+            "Never edit the deployed copy directly",
+            "release_gate.py"
+          ]
+        },
+        {
+          "kind": "contains",
+          "file": "PORTING.md",
+          "patterns": [
+            "code-writing-philosophy.md",
+            "unity-game-code-structure-design.md"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "capability": "Retired architectures stay retired in every active contract file",
+      "checks": [
+        {
+          "kind": "absent",
+          "files": [
+            "task-lifecycle/SKILL.md",
+            "task-lifecycle/references/obsidian-memory.md",
+            "task-lifecycle/assets/global-claude-entry-rule.md"
+          ],
+          "patterns": [
+            "gpt[ ._-]?5",
+            "codex[ _]?app__",
+            "~/\\.codex",
+            "runtime receipt",
+            "\\bterra\\b",
+            "\\bluna\\b"
+          ]
+        },
+        {
+          "kind": "absent",
+          "files": [
+            "README.md",
+            "README.zh.md"
+          ],
+          "patterns": [
+            "gpt[ ._-]?5",
+            "codex[ _]?app__",
+            "runtime receipt",
+            "\\bterra\\b",
+            "\\bluna\\b"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "capability": "Idea parity with qin-codex-skills is measurable, scored, wired into the project contract, and its published number matches the benchmark",
+      "checks": [
+        {
+          "kind": "script",
+          "script": "parity_benchmark.py",
+          "args": [
+            "--validate-only"
+          ],
+          "negative_control": [
+            "--validate-only",
+            "--benchmark-file",
+            "{fixture_root}/gutted-benchmark.json"
+          ],
+          "negative_control_fixture": {
+            "gutted-benchmark.json": "{\"upstream_repo\": \"https://example.invalid\", \"ideas\": []}"
+          },
+          "negative_control_diagnostic": "ideas numbered 1\\.\\.n"
+        },
+        {
+          "kind": "contains",
+          "file": "task-lifecycle/assets/idea-parity-benchmark.json",
+          "patterns": [
+            "upstream_evidence",
+            "claude_evidence",
+            "\"status\": \"ported\"",
+            "\"status\": \"retired\""
+          ]
+        },
+        {
+          "kind": "contains",
+          "file": "AGENTS.md",
+          "patterns": [
+            "parity_benchmark.py"
+          ]
+        },
+        {
+          "kind": "contains",
+          "file": "README.md",
+          "patterns": [
+            "parity_benchmark.py"
+          ]
+        },
+        {
+          "kind": "contains",
+          "file": "README.md",
+          "patterns": [
+            "70 ported · 1 deliberately inverted · 4 retired and contained · 0 stale anchors · 100\\.0% idea coverage"
+          ]
+        },
+        {
+          "kind": "contains",
+          "file": "README.zh.md",
+          "patterns": [
+            "70 ported · 1 deliberately inverted · 4 retired and contained · 0 stale anchors · 100\\.0% idea coverage"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "capability": "The work is never handed back to the user: no clarifying questions, no option menus, no mid-task stalls; every doubt is raised at the end",
+      "checks": [
+        {
+          "kind": "contains",
+          "file": "task-lifecycle/SKILL.md",
+          "patterns": [
+            "never hand the work back to Qin",
+            "Do not ask clarifying questions",
+            "belongs in the final report"
+          ]
+        },
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "9. Final report",
+          "patterns": [
+            "never raised mid-task as a question that stalls the work"
+          ]
+        },
+        {
+          "kind": "contains",
+          "file": "task-lifecycle/assets/global-claude-entry-rule.md",
+          "patterns": [
+            "never ask clarifying questions"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "capability": "Irreversible outward actions need explicit authorization, and authorization never substitutes for doing the work",
+      "checks": [
+        {
+          "kind": "contains",
+          "file": "task-lifecycle/SKILL.md",
+          "patterns": [
+            "irreversible outward action",
+            "Authorization is a safety precondition, never a substitute for doing the work"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "capability": "Post-task optimization keeps its guards: never before the base behavior, never optimizer self-verification, never shortness for its own sake",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "7. Post-task optimization (after PASS)",
+          "patterns": [
+            "Never before the base behavior exists",
+            "the optimizer never verifies its own optimization",
+            "Do not optimize merely because something could be shorter",
+            "Cache/Tools/"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "capability": "Project code defaults to cross-platform with one explicit runtime dispatch; the skill-runtime checker does not cover it",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "4. Execute",
+          "patterns": [
+            "defaults to working on Windows, macOS, and Linux",
+            "never write the macOS path first",
+            "Confirm the live project root before editing",
+            "Never create a new global skill unless Qin explicitly asks"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "capability": "The standing rule explicitly overrides every stop-and-ask in the referenced style files",
+      "checks": [
+        {
+          "kind": "contains",
+          "file": "task-lifecycle/SKILL.md",
+          "patterns": [
+            "overrides every \"stop and ask\" in every referenced style file",
+            "including but not limited to"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "capability": "The announce carries all five elements in Qin's language, and the style-sync check is not optional",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "3. Announce",
+          "patterns": [
+            "Write the announce in the user's language",
+            "are mandatory in every announce"
+          ]
+        },
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "4. Execute",
+          "patterns": [
+            "Style sync check \\(not optional\\)",
+            "never stop to offer it as a choice"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "capability": "Verification minimums scale by band and complex-tier visual output is personally viewed; fabricated tests and unmeasured wins are forbidden",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "5. Verify — result first, real, scaled, looped",
+          "patterns": [
+            "personally viewed",
+            "independent verifier agent \\(never the producer\\)",
+            "Never fabricate a test",
+            "not\\*\\* verification"
+          ]
+        }
+      ]
+    }
+  ]
+}

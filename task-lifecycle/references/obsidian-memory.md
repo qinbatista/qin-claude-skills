@@ -2,8 +2,8 @@
 
 ## Vault connection
 
-- Current known vault: `/Users/qin/Library/Mobile Documents/iCloud~md~obsidian/Documents/MyAILLM`
-- The discovery chain in SKILL.md section 1 is the contract: `~/.claude/CLAUDE.md` → project `AGENTS.md` → ask the user; persist any newly discovered location back to `~/.claude/CLAUDE.md` (`Obsidian LLM Wiki` section).
+- The vault path lives ONLY in `~/.claude/CLAUDE.md` (`Obsidian LLM Wiki` section) — never in this repo. A committed file naming a machine-specific absolute path violates SKILL.md section 6 path portability.
+- The discovery chain in SKILL.md section 1 is the contract: `~/.claude/CLAUDE.md` → project `AGENTS.md` → neither has it, so treat the vault as unreachable, continue without blocking, and report it at the end. Persist any newly discovered location back to `~/.claude/CLAUDE.md` (`Obsidian LLM Wiki` section).
 
 ## Read first, follow, never restructure
 
@@ -13,7 +13,7 @@ The vault is the user's; this skill is a guest in it.
 2. **Write only where the vault's rules say**, in the format they say. When unsure which page owns a fact, read the relevant index pages to find the owner instead of guessing or creating a new home.
 3. **Never change the vault's structure**: no new top-level folders, no renamed/moved/reorganized pages, no parallel hierarchies, no schema "improvements". If the vault's rules and this file disagree, the vault wins and this file must be updated.
 4. **Empty vault only**: if the vault has no rule files and no content at all, this skill may initialize a minimal structure — and must document that structure in the vault's own rule file (`AGENTS.md`) as it does so. A non-empty vault is always read-and-follow, then write.
-5. If reading is possible but a rule is ambiguous, prefer reading more (indexes, examples of past records) over inventing; ask the user only when the vault gives no answer.
+5. If reading is possible but a rule is ambiguous, prefer reading more (indexes, examples of past records) over inventing. If the vault still gives no answer, take the most conservative reading, write nothing you are unsure about, and raise it in the final report — never stall the task on it.
 
 ## Snapshot of the current vault schema (orientation only — re-read the vault's `AGENTS.md` each session; last verified 2026-08-05)
 
@@ -27,15 +27,9 @@ The vault is event-store based. `AI Memory/events.jsonl` is the only writable ch
 
 Never store passwords, tokens, API keys, private keys, cookies, auth files, raw transcripts, private logs, or sensitive raw snippets in the vault. Sanitized lessons only.
 
-## Local memory mirror — `<project>/Memory/`
+## No project-local memory files
 
-Purpose: the same lessons available instantly and offline, so the same problem is never solved twice — even when the vault is unreachable.
-
-- Layout mirrors the vault's classification for this project: `Memory/<Module-or-Theme>.md`, each with the sections it needs: `## Known bugs & fixes`, `## Regression checks`, `## Decisions`, `## Redo lessons`.
-- Entries are compact: symptom → root cause → fix → how to verify it stays fixed. Reference the vault event (project/module/issue-id) when one exists.
-- Update at task closeout together with the vault write. If only the local mirror could be written (vault unreachable), mark the entry `PENDING-VAULT` and sync it into the vault on the next connected task.
-- Before editing a module, read its `Memory/` file; known issues become regression checks in the current task's verification plan.
-- Point the project's `AGENTS.md` at `Memory/` so every agent finds it.
+Memory is never written into a project's working tree — no `Memory/` folder, no lesson/notes `.md` files in the repo. The vault is the only durable memory store (plus Claude's own auto-memory outside the repo). If the vault is unreachable at closeout, report it and write the record on the next connected task — do not create a local fallback store.
 
 ## Global `~/.claude/CLAUDE.md` rules
 
