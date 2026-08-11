@@ -1,4 +1,4 @@
-# One-shot audit: are the code rules and the decisions the same as qin-codex-skills, and is any GPT content left?
+# One-shot audit: are the code rules and the decisions the same as qin-codex-skills, and is any foreign-vendor content left?
 import json
 import re
 import subprocess
