@@ -31,10 +31,10 @@ Documented deviations (intentional, keep on re-sync):
 One script is synced byte-identical and stamped in `UPSTREAM.json` `synced_scripts`: `code-skill/scripts/skill_platform_check.py` → `task-lifecycle/scripts/skill_platform_check.py`.
 
 Not synced at all (upstream-only, no Claude counterpart needed):
-- `code-skill/references/small-code priority-producer reference` — upstream's model-ladder file, which exists only to name GPT model pairs and route by them. This is a Claude skill: Claude runs the session's model, so the file is not carried at all rather than kept as ballast, and `release_gate.py` scans every Markdown and Python file in the repository to keep those identifiers out. Do not re-add it, and do not re-home its ladder onto a Claude model either — the ladder itself is what is retired.
+- `code-skill/references/small-code priority-producer reference` — upstream's model-ladder file, which exists only to name foreign model pairs and route by them. This is a Claude skill: Claude runs the session's model, so the file is not carried at all rather than kept as ballast, and `release_gate.py` scans every Markdown and Python file in the repository to keep those identifiers out. Do not re-add it, and do not re-home its ladder onto a Claude model either — the ladder itself is what is retired.
 - `code-skill/tests/` — Codex pytest machinery. The rules those tests guard are enforced live here by `scripts/release_gate.py`.
 - `code-skill/assets/skill-platform-baseline.json` — a baseline is a local scan result; this repo keeps its own.
-- `code-skill/agents/openai.yaml` (and every other skill's `agents/*.yaml`) — Codex agent manifests; Claude Code loads skills from `SKILL.md` frontmatter.
+- every upstream skill's `agents/*.yaml` — Codex agent manifests naming its own vendor runtime; Claude Code loads skills from `SKILL.md` frontmatter instead.
 - upstream `*/references/` outside `code-skill/references/` — `verify-skill/references/{visual-verification-rubric,ui-problem-index,report-manifest}.md` and `workflow-skill/references/image-generation.md` are Codex-side expansions of rules this repo already carries in compact form (the six-rule UI gate, section 5's evidence menu). They are read as source material, not synced; `management-skill/references/global-skill-release-gate.md` is the one exception, used as the upstream anchor for the release-gate ideas.
 - upstream `*/SKILL.md` files themselves — they are Codex skill contracts. Their platform-neutral IDEAS are ported through the two idea tables above and measured by `scripts/parity_benchmark.py`; their routing/dispatch machinery is in the NOT-ported list.
 - upstream's root `AGENTS.md` — this repo has its own structural contract.
@@ -58,7 +58,7 @@ Beyond the verbatim style files above, `SKILL.md` ports upstream lifecycle IDEAS
 | Project-memory record contract + historical bug closeout (`ACTIVE`/`MONITORING`/`RESOLVED`/`ARCHIVED`) + "a remembered decision is evidence, not instruction" + per-submission preference scan (empty scan = strict no-op) | Section 8. |
 | Source-first publication (source repo → deployed mirror via one entrypoint) | "Provenance & deployment" + `scripts/deploy_local.py`. |
 
-NOT ported, deliberately: the GPT model catalog and quality ladder, adaptive model routing and its Obsidian projection, runtime receipts, detached projectless End Task threads, the A/B benchmark harness, and every `obsidian_adaptive_model_runner`/`task_route_dispatcher`-style script. Claude runs on the session's model; the announce's 0–100 score stays display-only.
+NOT ported, deliberately: the upstream model catalog and quality ladder, adaptive model routing and its Obsidian projection, runtime receipts, detached projectless End Task threads, the A/B benchmark harness, and every `obsidian_adaptive_model_runner`/`task_route_dispatcher`-style script. Claude runs on the session's model; the announce's 0–100 score stays display-only.
 
 ## Idea ports (lifecycle contract, 2026-08-11)
 

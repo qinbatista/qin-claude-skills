@@ -934,7 +934,7 @@
           "README.zh.md"
         ],
         "patterns": [
-          "gpt-5",
+          "[g]pt-5",
           "\\bterra\\b",
           "\\bluna\\b",
           "model ladder routing"

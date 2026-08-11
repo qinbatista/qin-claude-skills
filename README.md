@@ -79,7 +79,7 @@ It clones `qin-codex-skills` into `Cache/Tools/` on first run (or pass `--upstre
 
 - **PORTED** — the idea is carried here in Claude-native form.
 - **INVERTED** — this repo deliberately does the opposite (detached verification threads become a blocking in-task verification) and says so explicitly.
-- **RETIRED** — the idea must be provably absent from the *active contract* files (`SKILL.md`, the entry-rule asset, both READMEs). The gate scans every Markdown and Python file in the repository, so no GPT or Codex model identifier can reappear anywhere.
+- **RETIRED** — the idea must be provably absent from the *active contract* files (`SKILL.md`, the entry-rule asset, both READMEs). The gate scans every Markdown and Python file in the repository, so no foreign model identifier can reappear anywhere.
 
 Current score against upstream `1122c77`: **70 ported · 1 deliberately inverted · 4 retired and contained · 0 stale anchors · 100.0% idea coverage.** The release gate checks this published number against the benchmark, so it cannot go stale silently.
 

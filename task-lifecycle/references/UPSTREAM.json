@@ -2,7 +2,7 @@
   "repo": "https://github.com/qinbatista/qin-codex-skills",
   "commit": "1122c77cba44660a7646a69aca8e68a46393be59",
   "synced_at": "2026-08-11",
-  "note": "references/code-style and references/prompt-style are ported from this repo's code-skill/references with Claude-platform adaptations only. spark-small-code.md is deliberately NOT synced: it is a pure GPT model-ladder file and this is a Claude skill.",
+  "note": "references/code-style and references/prompt-style are ported from this repo's code-skill/references with Claude-platform adaptations only. The upstream small-code priority-producer reference is deliberately NOT synced: it exists only to name foreign model pairs and route by them, and this is a Claude skill.",
   "files": [
     "code-style/code-writing-philosophy.md",
     "code-style/coding-approach.md",

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "note": "Numbered authority for behavior Qin has explicitly retained. A capability stays mandatory until Qin retires it; a new feature may extend this catalog but may never silently drop an entry (release_gate.py enforces a minimum count and contiguous ids). Every text check matches only text that is IN FORCE: HTML comments, <details> blocks and fenced code (including nested fences) are stripped first, and 'section' checks require an exact section heading, so a deleted rule cannot be revived by parking its wording somewhere inert. Every 'script' check must also REJECT a synthetic known-bad fixture, so an emptied or stubbed checker cannot pass. Known limit, stated rather than pretended: the 'absent' scans are literal patterns over normalized text — they catch spelling and case variants listed here, not unicode homoglyphs or arbitrary paraphrase. They defend against accidental regression, not a determined saboteur with commit access. Paths are repo-root relative.",
+  "note": "Numbered authority for behavior Qin has explicitly retained. A capability stays mandatory until Qin retires it; a new feature may extend this catalog but may never silently drop an entry (release_gate.py enforces a minimum count and contiguous ids). Every text check matches only text that is IN FORCE: HTML comments, <details> blocks and fenced code (including nested fences) are stripped first, and 'section' checks require an exact section heading, so a deleted rule cannot be revived by parking its wording somewhere inert. Every 'script' check must also REJECT a synthetic known-bad fixture, so an emptied or stubbed checker cannot pass. Detection patterns are written with a bracketed first character (for example [g]pt) so the vendor string itself never appears as literal text while the regex still matches exactly. Known limit, stated rather than pretended: the 'absent' scans are literal patterns over normalized text — they catch spelling and case variants listed here, not unicode homoglyphs or arbitrary paraphrase. They defend against accidental regression, not a determined saboteur with commit access. Paths are repo-root relative.",
   "retired_architectures": [
-    "the GPT model catalog and quality ladder, and adaptive model routing",
+    "the upstream model catalog and quality ladder, and adaptive model routing",
     "runtime receipts and model-execution disclosure blocks",
     "detached projectless End Task threads that return before verification completes",
     "the A/B model-routing benchmark harness",
@@ -357,7 +357,7 @@
             "task-lifecycle/assets/global-claude-entry-rule.md"
           ],
           "patterns": [
-            "gpt[ ._-]?5",
+            "[g]pt[ ._-]?5",
             "codex[ _]?app__",
             "~/\\.codex",
             "runtime receipt",
@@ -372,7 +372,7 @@
             "README.zh.md"
           ],
           "patterns": [
-            "gpt[ ._-]?5",
+            "[g]pt[ ._-]?5",
             "codex[ _]?app__",
             "runtime receipt",
             "\\bterra\\b",
@@ -576,7 +576,7 @@
     },
     {
       "id": 25,
-      "capability": "This is a Claude skill: no GPT, Codex or other foreign model identifier survives anywhere in the repository",
+      "capability": "This is a Claude skill: no foreign model identifier survives anywhere in the repository",
       "checks": [
         {
           "kind": "absent_tree",
@@ -589,7 +589,7 @@
             "Cache"
           ],
           "patterns": [
-            "gpt[ ._-]?5",
+            "[g]pt[ ._-]?5",
             "codex[ _-]?spark",
             "codex[ _]?app__",
             "\\bspark[ |_-]?(low|high|xhigh|first)\\b",
@@ -597,7 +597,7 @@
             "\\bterra\\b",
             "\\bsol[ |_-]?(ultra|high)\\b",
             "o[34][ -]?mini",
-            "\\bchatgpt\\b"
+            "\\b[c]hat[g]pt\\b"
           ]
         }
       ]
