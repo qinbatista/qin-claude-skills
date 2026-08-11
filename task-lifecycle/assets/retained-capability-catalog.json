@@ -122,14 +122,16 @@
     },
     {
       "id": 5,
-      "capability": "The announce is a standalone message carrying difficulty, score, model, steps, and skills, with a mid-task change notice",
+      "capability": "The announce is mandatory, emitted before execution, carries all five elements, and never ends the task",
       "checks": [
         {
           "kind": "section",
           "file": "task-lifecycle/SKILL.md",
           "section": "3. Announce",
           "patterns": [
-            "the announce is the entire message",
+            "The announce is mandatory",
+            "has failed the lifecycle",
+            "never the last thing you do",
             "Mid-task change notice"
           ]
         }
@@ -451,7 +453,8 @@
           "patterns": [
             "never hand the work back to Qin",
             "Do not ask clarifying questions",
-            "belongs in the final report"
+            "belongs in the final report",
+            "State alternatives, never offer them"
           ]
         },
         {
@@ -599,6 +602,24 @@
             "o[34][ -]?mini",
             "\\b[c]hat[g]pt\\b"
           ]
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "capability": "Every lifecycle feature is provable by real execution, not only by contract text",
+      "checks": [
+        {
+          "kind": "contains",
+          "file": "AGENTS.md",
+          "patterns": [
+            "skill_behavior_suite.py",
+            "parity_audit.py"
+          ]
+        },
+        {
+          "kind": "missing",
+          "path": "tools"
         }
       ]
     }
