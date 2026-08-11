@@ -11,8 +11,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from contract_text import in_force_text
 
 # Raise this whenever a capability is added: the floor is what stops the last entry being quietly dropped.
-MINIMUM_CAPABILITIES = 24
-REQUIRED_CHECK_KEYS = {"script": ["script", "args", "negative_control", "negative_control_fixture", "negative_control_diagnostic"], "contains": ["file", "patterns"], "section": ["file", "section", "patterns"], "absent": ["files", "patterns"], "missing": ["path"]}
+MINIMUM_CAPABILITIES = 25
+REQUIRED_CHECK_KEYS = {"script": ["script", "args", "negative_control", "negative_control_fixture", "negative_control_diagnostic"], "contains": ["file", "patterns"], "section": ["file", "section", "patterns"], "absent": ["files", "patterns"], "absent_tree": ["root", "suffixes", "exclude", "patterns"], "missing": ["path"]}
 
 skill_root = Path(__file__).resolve().parent.parent
 repo_root = skill_root.parent
@@ -111,6 +111,10 @@ def run_retained_check(check):
             return False, f"cannot scan missing files {unreadable_files}"
         retired_hits = [f"{scanned_file} :: {pattern}" for scanned_file in check["files"] for pattern in check["patterns"] if re.search(pattern, contract_text(scanned_file), re.IGNORECASE)]
         return not retired_hits, f"retired content present in {retired_hits}" if retired_hits else f"{len(check['files'])} active files free of {len(check['patterns'])} retired markers"
+    if check["kind"] == "absent_tree":
+        scanned_files = [path for path in sorted((repo_root / check["root"]).rglob("*")) if path.is_file() and path.suffix in check["suffixes"] and not set(check["exclude"]) & set(path.relative_to(repo_root).parts) and ".git" not in path.parts]
+        foreign_hits = [f"{path.relative_to(repo_root)} :: {pattern}" for path in scanned_files for pattern in check["patterns"] if re.search(pattern, in_force_text(path), re.IGNORECASE)]
+        return not foreign_hits, f"foreign model identifiers present in {foreign_hits}" if foreign_hits else f"{len(scanned_files)} files free of {len(check['patterns'])} foreign model identifiers"
     path_exists = (repo_root / check["path"]).exists()
     return not path_exists, f"{check['path']} must not exist in the repo" if path_exists else f"{check['path']} correctly absent"
 

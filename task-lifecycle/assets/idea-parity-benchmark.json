@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "upstream_repo": "https://github.com/qinbatista/qin-codex-skills",
-  "note": "Scored proof that the Claude single-skill lifecycle carries the qin-codex-skills lifecycle ideas. Every entry names the phrase that proves the idea exists UPSTREAM and the phrase that proves its Claude-native form exists HERE, so the benchmark cannot drift into fiction: a wrong upstream anchor scores STALE, not PASS. Three statuses: 'ported' (the idea must be present here), 'inverted' (this repo deliberately does the opposite and must say so explicitly), and 'retired' (the idea must be provably ABSENT from the active Claude contract files).",
+  "note": "Scored proof that the Claude single-skill lifecycle carries the qin-codex-skills lifecycle ideas. Every entry names the phrase that proves the idea exists UPSTREAM and the phrase that proves its Claude-native form exists HERE, so the benchmark cannot drift into fiction: a wrong upstream anchor scores STALE, not PASS. Three statuses: 'ported' (the idea must be present here), 'inverted' (this repo deliberately does the opposite and must say so explicitly), and 'retired' (the idea must be provably ABSENT from the active Claude contract files). The retired-marker patterns necessarily name what they ban, so this file and retained-capability-catalog.json are the only places a foreign model identifier may appear; release_gate.py capability 25 scans every Markdown and Python file in the repository to keep them out of everything else.",
   "ideas": [
     {
       "id": 1,
@@ -918,12 +918,12 @@
     },
     {
       "id": 52,
-      "idea": "GPT model catalog / quality ladder and adaptive model routing",
+      "idea": "The upstream model catalog / quality ladder and adaptive model routing",
       "status": "retired",
       "upstream_evidence": {
-        "file": "code-skill/references/spark-small-code.md",
+        "file": "task-analyze-skill/references/model-capabilities.md",
         "patterns": [
-          "gpt-5\\.3-codex-spark\\|low"
+          "weakest-to-strongest quality ladder"
         ]
       },
       "claude_evidence": {

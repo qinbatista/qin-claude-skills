@@ -79,7 +79,7 @@ python3 task-lifecycle/scripts/parity_benchmark.py
 
 - **PORTED** — 该思路已以 Claude 原生形式承接。
 - **INVERTED** — 本仓库刻意反着做（detached 验证线程 → 任务内阻塞式验证），并且必须白纸黑字写明。
-- **RETIRED** — 该思路必须在*活跃契约文件*（`SKILL.md`、入口规则模板、两个 README）中可证明地缺席。`references/code-style/spark-small-code.md` 是被刻意排除的：它为了同步保真而与上游逐字节一致（含 GPT 模型名），由 SKILL.md 第 5 节的词汇桥接负责中和它。
+- **RETIRED** — 该思路必须在*活跃契约文件*（`SKILL.md`、入口规则模板、两个 README）中可证明地缺席。门禁会扫描仓库里每一个 Markdown 和 Python 文件，任何 GPT / Codex 模型标识都无法再出现。
 
 对上游 `1122c77` 的当前成绩：**70 ported · 1 deliberately inverted · 4 retired and contained · 0 stale anchors · 100.0% idea coverage。** 发布门禁会把这个公布的数字和 benchmark 实际结果对齐，所以它不会悄悄过期。
 
