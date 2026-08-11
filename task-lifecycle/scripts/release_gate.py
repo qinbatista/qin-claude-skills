@@ -11,8 +11,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from contract_text import in_force_text
 
 # Raise this whenever a capability is added: the floor is what stops the last entry being quietly dropped.
-MINIMUM_CAPABILITIES = 26
-REQUIRED_CHECK_KEYS = {"script": ["script", "args", "negative_control", "negative_control_fixture", "negative_control_diagnostic"], "contains": ["file", "patterns"], "section": ["file", "section", "patterns"], "absent": ["files", "patterns"], "absent_tree": ["root", "suffixes", "exclude", "patterns"], "missing": ["path"]}
+MINIMUM_CAPABILITIES = 27
+REQUIRED_CHECK_KEYS = {"script": ["script", "args", "negative_control", "negative_control_fixture", "negative_control_diagnostic"], "contains": ["file", "patterns"], "section": ["file", "section", "patterns"], "absent": ["files", "patterns"], "absent_tree": ["root", "suffixes", "exclude", "patterns"], "repo_script": ["path", "args", "negative_control", "negative_control_fixture", "negative_control_diagnostic"], "missing": ["path"]}
 
 skill_root = Path(__file__).resolve().parent.parent
 repo_root = skill_root.parent
@@ -68,9 +68,10 @@ def contract_text(relative_path):
     return in_force_text(repo_root / relative_path)
 
 
-def run_gate_script(script_name, raw_arguments, fixture_root=""):
+def run_gate_script(script_name, raw_arguments, fixture_root="", repo_relative=False):
     arguments = [argument.replace("{repo_root}", str(repo_root)).replace("{skill_root}", str(skill_root)).replace("{fixture_root}", fixture_root) for argument in raw_arguments]
-    return subprocess.run([sys.executable, str(skill_root / "scripts" / script_name), *arguments], capture_output=True, text=True)
+    script_path = repo_root / script_name if repo_relative else skill_root / "scripts" / script_name
+    return subprocess.run([sys.executable, str(script_path), *arguments], capture_output=True, text=True, cwd=str(repo_root))
 
 
 # A stub that exits 0 on everything satisfies any "did it pass?" test, so every checker must also REJECT a synthetic
@@ -81,17 +82,18 @@ def negative_control_result(check):
             fixture_file = Path(fixture_directory).joinpath(*relative_name.split("/"))
             fixture_file.parent.mkdir(parents=True, exist_ok=True)
             fixture_file.write_text(content, encoding="utf-8")
-        control = run_gate_script(check["script"], check["negative_control"], fixture_directory)
+        control = run_gate_script(check.get("script") or check["path"], check["negative_control"], fixture_directory, repo_relative="path" in check)
         # The control must both reject the fixture AND explain why: an exit code alone is reproducible by a stub that
         # only sniffs argv, whereas the diagnostic text can only come from the checker actually inspecting the fixture.
         return control.returncode != 0 and bool(re.search(check["negative_control_diagnostic"], control.stdout + control.stderr)), f"exit={control.returncode}"
 
 
 def run_retained_check(check):
-    if check["kind"] == "script":
-        completed = run_gate_script(check["script"], check["args"])
+    if check["kind"] in ("script", "repo_script"):
+        repo_relative = check["kind"] == "repo_script"
+        completed = run_gate_script(check.get("script") or check["path"], check["args"], repo_relative=repo_relative)
         control_rejected, control_detail = negative_control_result(check)
-        return completed.returncode == 0 and control_rejected, f"{check['script']} exit={completed.returncode}, negative control {control_detail}{'' if control_rejected else ' — the checker did not reject the known-bad fixture with its own diagnostic, so it proves nothing'}"
+        return completed.returncode == 0 and control_rejected, f"{check.get('script') or check['path']} exit={completed.returncode}, negative control {control_detail}{'' if control_rejected else ' — the checker did not reject the known-bad fixture with its own diagnostic, so it proves nothing'}"
     if check["kind"] == "contains":
         if not (repo_root / check["file"]).is_file():
             return False, f"{check['file']} is missing"

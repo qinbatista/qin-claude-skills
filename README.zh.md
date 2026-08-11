@@ -67,6 +67,16 @@ python3 task-lifecycle/scripts/release_gate.py
 
 新功能可以往目录里追加条目；退役条目只能由明确决定移除。`retired_architectures` 里的东西不会因为某个旧 commit 或旧记忆还提到它就被复活。
 
+## 行为门禁
+
+契约文字不算证据。`tests/skill_behavior_suite.py` 会起 **20 个真实的 headless `claude` 会话**——一个功能一个——同时对**会话记录**和**它真正落盘的文件**做断言：铁律、播报、Python/C#/Unity 风格、写码门、Quick Check、验证、修复循环、Cache 纪律、记忆不落仓库、跨平台默认、prompt 契约、UI 门禁、金库连接、难度分级。
+
+```bash
+python3 tests/skill_behavior_suite.py
+```
+
+加 `--gate` 就是发布必过项：`release_gate.py` 的能力 27 会调用它，20 项不全绿就不许部署、不许发布。`tests/.behaviour-stamp.json` 记录某次全绿证明的是**哪一份契约文本**——改动 `SKILL.md`、`references/` 或入口规则模板都会让戳记失效、强制重跑。它确实要烧 token 和几分钟；正确性优先。
+
 ## 思路对齐 benchmark
 
 不是嘴上说"和 codex skill 思路一致"，而是跑出来证明。`assets/idea-parity-benchmark.json` 为每条生命周期思路记两个锚点：证明它**在上游存在**的原句，和证明它**在这里以 Claude 原生形式存在**的原句。`scripts/parity_benchmark.py` 会同时对着真实的上游 clone 校验两边——锚点写错会判 `STALE`，不会蒙混过关。锚点只在**生效文本**中匹配：藏进注释、`<details>` 折叠块或示例代码围栏里的措辞一律不算数：

@@ -224,7 +224,8 @@
           "file": "task-lifecycle/SKILL.md",
           "section": "4. Execute",
           "patterns": [
-            "Quick Check \\(producer self-check\\)"
+            "Quick Check \\(producer self-check\\)",
+            "Report it by name"
           ]
         },
         {
@@ -620,6 +621,28 @@
         {
           "kind": "missing",
           "path": "tools"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "capability": "Every lifecycle feature is proven by REAL headless execution before any deploy or publish; a contract edit invalidates the proof",
+      "checks": [
+        {
+          "kind": "repo_script",
+          "path": "tests/skill_behavior_suite.py",
+          "args": [
+            "--gate"
+          ],
+          "negative_control": [
+            "--gate",
+            "--contract-root",
+            "{fixture_root}"
+          ],
+          "negative_control_fixture": {
+            "placeholder.txt": "a directory with no lifecycle contract: the behaviour gate must refuse to certify it"
+          },
+          "negative_control_diagnostic": "no lifecycle contract"
         }
       ]
     }

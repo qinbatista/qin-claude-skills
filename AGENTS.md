@@ -10,7 +10,7 @@ Source of truth for the Claude Code `task-lifecycle` skill. `~/.claude/skills/ta
 - `task-lifecycle/references/UPSTREAM.json` — the sync stamp (upstream repo + commit + synced file list).
 - `task-lifecycle/assets/retained-capability-catalog.json` — numbered authority for behavior that must not regress, plus the architectures that stay retired.
 - `task-lifecycle/scripts/` — skill runtime surface; must stay portable across macOS/Linux/Windows and must run on the system Python 3.9.
-- `tests/` — audits of the skill itself, run on demand. They drive the real `claude` CLI, so they cost tokens and are never part of the release gate.
+- `tests/` — audits of the skill itself. `skill_behavior_suite.py` is part of the release gate; correctness comes before run cost.
 
 ## Entry points
 
@@ -19,7 +19,8 @@ Source of truth for the Claude Code `task-lifecycle` skill. `~/.claude/skills/ta
 - `python3 task-lifecycle/scripts/deploy_local.py` — source-first deploy (`--check` previews).
 - `python3 task-lifecycle/scripts/parity_benchmark.py --upstream <clone>` — scored idea-parity benchmark against qin-codex-skills.
 - `python3 task-lifecycle/scripts/sync_check.py` — upstream drift check (`--update` restamps).
-- `python3 tests/skill_behavior_suite.py [case-id ...]` — behavioural suite: runs real headless Claude sessions and asserts each lifecycle feature actually took effect. Fixtures live outside the repo so they resolve as their own project root.
+- `python3 tests/skill_behavior_suite.py [case-id ...]` — behavioural suite: 20 real headless Claude sessions, one per lifecycle feature, asserted against both the transcript and the files each session produced. Fixtures live outside the repo so they resolve as their own project root.
+- `python3 tests/skill_behavior_suite.py --gate` — the same suite as a release requirement. `release_gate.py` capability 27 calls it, so no deploy or publish happens without it. `tests/.behaviour-stamp.json` records which exact contract text a green run proved; any edit to `SKILL.md`, `references/` or the entry-rule asset invalidates it and forces a fresh run.
 - `python3 tests/parity_audit.py <upstream clone>` — rule-for-rule style diff, decision-parity score, and a foreign-model-identifier sweep.
 
 Every entry point runs from the repository root.
@@ -38,4 +39,4 @@ Every entry point runs from the repository root.
 
 ## Definition of done
 
-`release_gate.py` PASS, `self_check.py` PASS with a byte-identical mirror, `sync_check.py` SAME (or a documented re-port), and `parity_benchmark.py` at 100% of ported ideas with every retired architecture still absent. A change to the lifecycle contract itself additionally requires `tests/skill_behavior_suite.py` green.
+`release_gate.py` PASS, `self_check.py` PASS with a byte-identical mirror, `sync_check.py` SAME (or a documented re-port), and `parity_benchmark.py` at 100% of ported ideas with every retired architecture still absent. The behaviour gate is inside `release_gate.py`, so a contract change cannot ship without 20/20 features re-proven by real execution.

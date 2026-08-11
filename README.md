@@ -67,6 +67,16 @@ python3 task-lifecycle/scripts/release_gate.py
 
 A new feature may extend the catalog; only an explicit decision retires an entry. Nothing under `retired_architectures` comes back because an old commit or an old memory record still mentions it.
 
+## Behaviour gate
+
+Contract text is not evidence. `tests/skill_behavior_suite.py` runs 20 real headless `claude` sessions — one per lifecycle feature — and asserts each one against both the session transcript and the files it actually produced: the standing rule, the announce, Python/C#/Unity style, the writing gate, Quick Check, verification, the fix loop, Cache discipline, memory staying out of the repo, cross-platform defaults, the prompt contract, the UI gate, the vault connection, and difficulty banding.
+
+```bash
+python3 tests/skill_behavior_suite.py
+```
+
+`--gate` makes it a release requirement: `release_gate.py` capability 27 calls it, so nothing deploys or publishes until every feature is re-proven. `tests/.behaviour-stamp.json` records which exact contract text a green run proved — editing `SKILL.md`, `references/` or the entry-rule asset invalidates it and forces a fresh run. It costs real tokens and minutes; correctness comes first.
+
 ## Idea-parity benchmark
 
 Proof — not assertion — that this skill still thinks the way `qin-codex-skills` thinks. `assets/idea-parity-benchmark.json` lists every lifecycle idea with two anchors: the phrase that proves it exists **upstream**, and the phrase that proves its Claude-native form exists **here**. `scripts/parity_benchmark.py` checks both sides against a real upstream clone, so a wrong anchor scores `STALE` instead of silently passing. Anchors are matched only against text that is *in force* — wording parked in a comment, a `<details>` block, or an illustrative code fence does not count:
