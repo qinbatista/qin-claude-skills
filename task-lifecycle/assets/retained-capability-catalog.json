@@ -172,7 +172,8 @@
           "section": "4. Execute",
           "patterns": [
             "User Experience Philosophy",
-            "Mandatory Basic UI Change Gate"
+            "Mandatory Basic UI Change Gate",
+            "Report the gate by name"
           ]
         },
         {
@@ -250,7 +251,8 @@
             "Verification is required by default",
             "intentionally_skipped_simple_task",
             "One verification pass owns the whole check list",
-            "Static wording alone never proves behavior"
+            "Static wording alone never proves behavior",
+            "prints the literal token"
           ]
         }
       ]
@@ -455,7 +457,9 @@
             "never hand the work back to Qin",
             "Do not ask clarifying questions",
             "belongs in the final report",
-            "State alternatives, never offer them"
+            "State alternatives, never offer them",
+            "invitation to reply is an offer",
+            "these strings never appear in your output"
           ]
         },
         {
@@ -643,6 +647,162 @@
             "placeholder.txt": "a directory with no lifecycle contract: the behaviour gate must refuse to certify it"
           },
           "negative_control_diagnostic": "no lifecycle contract"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "capability": "Right work, right model: dispatch-time model choice for subagents, with no routing table and no score-driven routing",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "4. Execute",
+          "patterns": [
+            "Right work, right model",
+            "cannot switch it mid-task",
+            "never a routing table"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "capability": "Tail work runs behind the delivered result, in a background agent the session still owns and waits for",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "5. Verify — result first, real, scaled, looped",
+          "patterns": [
+            "Tail work runs behind the result",
+            "background subagent",
+            "waits for that agent",
+            "does the same work inline"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "capability": "Every durable memory record names the software and the exact model that wrote it, so tools sharing the vault can weigh each other's records",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "8. Record memory",
+          "patterns": [
+            "Every record says who wrote it",
+            "written-by",
+            "agent=claude-code",
+            "never guess another tool's identifier"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "capability": "One submission is enough: the announce never ends a turn, in any run type, and a stopped turn is handing the work back",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "3. Announce",
+          "patterns": [
+            "never the last thing you do — in any run type, with no exceptions",
+            "There is no interactive exemption",
+            "come back and type"
+          ]
+        },
+        {
+          "kind": "contains",
+          "file": "task-lifecycle/SKILL.md",
+          "patterns": [
+            "Submitting a task means he can walk away",
+            "never end a turn on a plan"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "capability": "A BLOCKED report is a finished investigation, never a menu handed back to Qin",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "5. Verify — result first, real, scaled, looped",
+          "patterns": [
+            "is a report, not a question",
+            "Never end a BLOCKED report by asking Qin to pick"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "capability": "A pass is never manufactured by teaching the code to recognise the check that tests it",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "5. Verify — result first, real, scaled, looped",
+          "patterns": [
+            "Never satisfy a check by teaching the code about the check",
+            "disclosing the trick afterwards does not redeem it",
+            "unreachable as specified"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "capability": "No orphan background work: every background job is named, waited for, and killed before control returns to Qin",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "5. Verify — result first, real, scaled, looped",
+          "patterns": [
+            "No orphan background work",
+            "Name it or don't start it",
+            "Never end a turn on something still running",
+            "Handing control back kills everything first",
+            "Watchdogs, pollers, heartbeat loops"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "capability": "The result is presented before the verification pass starts, never bundled with its outcome",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "5. Verify — result first, real, scaled, looped",
+          "patterns": [
+            "Present before you verify, not together with it",
+            "the verification pass starts",
+            "Result first is an ordering rule",
+            "it holds at \\*\\*every\\*\\* band"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "capability": "A durable change always leaves a record: no-real-project and small-diff are never reasons to skip the vault write",
+      "checks": [
+        {
+          "kind": "section",
+          "file": "task-lifecycle/SKILL.md",
+          "section": "8. Record memory",
+          "patterns": [
+            "is never a reason to skip a record",
+            "the working directory's own name when nothing else names it",
+            "durable change that left no trace"
+          ]
         }
       ]
     }

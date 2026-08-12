@@ -1,6 +1,8 @@
 {
-  "contract_digest": "dff0757f093bd08995ddae4cb4eb537d1d61cc9c9280677f4774b851f72929de",
-  "ran_at_digest": "dff0757f093bd08995ddae4cb4eb537d1d61cc9c9280677f4774b851f72929de",
+  "contract_digest": "f5eb78276620197c7f5e81039e0719f901a5b97ef2c4a1b76048bf69caabee8a",
+  "ran_at_digest": "f5eb78276620197c7f5e81039e0719f901a5b97ef2c4a1b76048bf69caabee8a",
   "passed": true,
-  "features": 20
+  "features": 40,
+  "repeat": 5,
+  "rounds_used": 2
 }

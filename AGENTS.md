@@ -19,7 +19,7 @@ Source of truth for the Claude Code `task-lifecycle` skill. `~/.claude/skills/ta
 - `python3 task-lifecycle/scripts/deploy_local.py` — source-first deploy (`--check` previews).
 - `python3 task-lifecycle/scripts/parity_benchmark.py --upstream <clone>` — scored idea-parity benchmark against qin-codex-skills.
 - `python3 task-lifecycle/scripts/sync_check.py` — upstream drift check (`--update` restamps).
-- `python3 tests/skill_behavior_suite.py [case-id ...]` — behavioural suite: 20 real headless Claude sessions, one per lifecycle feature, asserted against both the transcript and the files each session produced. Fixtures live outside the repo so they resolve as their own project root.
+- `python3 tests/skill_behavior_suite.py [case-id ...] [--repeat N] [--workers N]` — behavioural suite: one real headless Claude session per rule, asserted against the transcript, the files it produced, and the memory events it recorded. `--repeat N` runs each rule N times and reports PASS / FLAKY / FAIL, because a rule that fires sometimes is not a rule. Each session gets its own disposable clone of the vault (the production vault is never a test target) and the suite installs the source contract into the deployed mirror first, so the children exercise the text under test. Fixtures live outside the repo so they resolve as their own project root.
 - `python3 tests/skill_behavior_suite.py --gate` — the same suite as a release requirement. `release_gate.py` capability 27 calls it, so no deploy or publish happens without it. `tests/.behaviour-stamp.json` records which exact contract text a green run proved; any edit to `SKILL.md`, `references/` or the entry-rule asset invalidates it and forces a fresh run.
 - `python3 tests/parity_audit.py <upstream clone>` — rule-for-rule style diff, decision-parity score, and a foreign-model-identifier sweep.
 
@@ -39,4 +39,4 @@ Every entry point runs from the repository root.
 
 ## Definition of done
 
-`release_gate.py` PASS, `self_check.py` PASS with a byte-identical mirror, `sync_check.py` SAME (or a documented re-port), and `parity_benchmark.py` at 100% of ported ideas with every retired architecture still absent. The behaviour gate is inside `release_gate.py`, so a contract change cannot ship without 20/20 features re-proven by real execution.
+`release_gate.py` PASS, `self_check.py` PASS with a byte-identical mirror, `sync_check.py` SAME (or a documented re-port), and `parity_benchmark.py` at 100% of ported ideas with every retired architecture still absent. The behaviour gate is inside `release_gate.py`, so a contract change cannot ship until every rule is re-proven by real execution.

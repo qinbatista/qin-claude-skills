@@ -966,7 +966,7 @@
     },
     {
       "id": 54,
-      "idea": "Detached Ending threads that return before verification completes — deliberately inverted: verification blocks inside the task",
+      "idea": "Detached Ending threads that return before verification completes — deliberately inverted: tail work may run in a background agent, but the task still owns it and waits",
       "status": "inverted",
       "upstream_evidence": {
         "file": "verify-skill/SKILL.md",
@@ -977,7 +977,8 @@
       "claude_evidence": {
         "file": "task-lifecycle/SKILL.md",
         "patterns": [
-          "never detached, never returning before every check PASSes"
+          "returning before every check PASSes is not",
+          "waits for that agent to come back before the final report"
         ]
       }
     },

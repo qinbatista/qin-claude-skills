@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from contract_text import in_force_text
 
 # Raise this whenever a capability is added: the floor is what stops the last entry being quietly dropped.
-MINIMUM_CAPABILITIES = 27
+MINIMUM_CAPABILITIES = 36
 REQUIRED_CHECK_KEYS = {"script": ["script", "args", "negative_control", "negative_control_fixture", "negative_control_diagnostic"], "contains": ["file", "patterns"], "section": ["file", "section", "patterns"], "absent": ["files", "patterns"], "absent_tree": ["root", "suffixes", "exclude", "patterns"], "repo_script": ["path", "args", "negative_control", "negative_control_fixture", "negative_control_diagnostic"], "missing": ["path"]}
 
 skill_root = Path(__file__).resolve().parent.parent
